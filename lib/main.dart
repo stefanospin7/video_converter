@@ -161,6 +161,17 @@ Future<void> _convertFiles(BuildContext context) async {
     // Check if the file is a webm file
     if (file.path.endsWith('.webm')) {
       try {
+        // Construct output file path
+        final outputFilePath = '${file.path.split('.')[0]}.mp4';
+
+        // Check if the output file already exists
+        final outputFile = File(outputFilePath);
+        if (await outputFile.exists()) {
+          // Append 'copy' to the file name if it already exists
+          final outputFileName = '${file.path.split('.')[0]}_copy.mp4';
+          await outputFile.rename(outputFileName);
+        }
+
         // Construct FFmpeg command to convert WEBM to MP4
         final process = await Process.start(
           'ffmpeg',
@@ -169,7 +180,7 @@ Future<void> _convertFiles(BuildContext context) async {
             file.path,
             '-vf',
             'scale=trunc(iw/2)*2:trunc(ih/2)*2',
-            '${file.path.split('.')[0]}.mp4'
+            outputFilePath,
           ],
         );
 
@@ -215,6 +226,7 @@ Future<void> _convertFiles(BuildContext context) async {
     isConverting = false; // Set conversion status to false after conversion is completed
   });
 }
+
 
 
   Widget _getFileIcon(XFile file) {
