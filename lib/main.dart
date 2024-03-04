@@ -114,9 +114,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 20,
                 thickness: 2,
               ),
-              ElevatedButton(
-                onPressed: () => _pickFile(context),
-                child: const Text("Pick File"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _pickFile(context),
+                    child: const Text("Pick File"),
+                  ),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: selectedFiles.isNotEmpty ? () => _convertFiles(context) : null,
+                    child: const Text("Convert"),
+                  ),
+                ],
               ),
             ],
           ),
@@ -133,6 +143,51 @@ class _MyHomePageState extends State<MyHomePage> {
       selectedFiles = files;
     });
   }
+
+Future<void> _convertFiles(BuildContext context) async {
+  // Ensure there are selected files
+  if (selectedFiles.isEmpty) return;
+
+  // Iterate through each selected file and perform conversion
+  for (final file in selectedFiles) {
+    // Check if the file is a webm file
+    if (file.path.endsWith('.webm')) {
+      // Get the directory of the original file
+      final originalDir = file.path.split('/').sublist(0, file.path.split('/').length - 1).join('/');
+      
+      // Construct the path for the new mp4 file
+      final fileNameWithoutExtension = file.name.split('.').first;
+      final newFilePath = '$originalDir/$fileNameWithoutExtension.mp4';
+      
+      // Perform the conversion (replace with actual conversion logic)
+      // For demonstration purpose, just show a message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Converting ${file.name} to MP4..."),
+        ),
+      );
+      
+      // Simulate conversion process by delaying for 2 seconds (replace with actual conversion logic)
+      await Future.delayed(Duration(seconds: 2));
+      
+      // Show conversion success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("${file.name} converted to MP4 successfully!"),
+        ),
+      );
+
+      // Simulate saving the converted file by copying the original file (replace with actual saving logic)
+      // For demonstration purpose, just show a message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Saving $newFilePath..."),
+        ),
+      );
+    }
+  }
+}
+
 
   Widget _getFileIcon(XFile file) {
     IconData iconData;
