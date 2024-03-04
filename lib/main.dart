@@ -66,22 +66,25 @@ class MyHomePage extends StatelessWidget {
 
 void _pickFile(BuildContext context) async {
   final typeGroup = XTypeGroup(label: 'Video', extensions: ['webm']);
-  final file = await openFile(acceptedTypeGroups: [typeGroup]);
+  final files = await openFiles(acceptedTypeGroups: [typeGroup]);
 
-  if (file != null) {
-    // Handle the selected file
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Selected file: ${file.name}"),
-      ),
-    );
+  if (files.isNotEmpty) {
+    // Handle the selected files
+    for (final file in files) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Selected file: ${file.name}"),
+        ),
+      );
+    }
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text("No file selected"),
+        content: Text("No files selected"),
       ),
     );
   }
- }
+}
+
 }
  
