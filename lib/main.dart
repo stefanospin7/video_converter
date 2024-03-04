@@ -37,8 +37,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  List<XFile> selectedFiles = [];
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +64,19 @@ class MyHomePage extends StatelessWidget {
                 onPressed: () => _pickFile(context),
                 child: const Text("Pick File"),
               ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: selectedFiles.length,
+                  itemBuilder: (context, index) {
+                    final file = selectedFiles[index];
+                    return ListTile(
+                      leading: _getFileIcon(file),
+                      title: Text(file.name),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -64,27 +84,36 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-void _pickFile(BuildContext context) async {
-  final typeGroup = XTypeGroup(label: 'Video', extensions: ['webm']);
-  final files = await openFiles(acceptedTypeGroups: [typeGroup]);
+  Future<void> _pickFile(BuildContext context) async {
+    final typeGroup = XTypeGroup(label: 'Video', extensions: ['webm']);
+    final files = await openFiles(acceptedTypeGroups: [typeGroup]);
 
-  if (files.isNotEmpty) {
-    // Handle the selected files
-    for (final file in files) {
+    setState(() {
+      selectedFiles = files;
+    });
+
+    if (files.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Selected file: ${file.name}"),
+          content: Text("Selected ${files.length} files"),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("No files selected"),
         ),
       );
     }
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("No files selected"),
-      ),
-    );
+  }
+
+  Widget _getFileIcon(XFile file) {
+    IconData iconData;
+    if (file.path.endsWith('.webm')) {
+      iconData = Icons.video_library;
+    } else {
+      iconData = Icons.file_copy;
+    }
+    return Icon(iconData);
   }
 }
-
-}
- 
