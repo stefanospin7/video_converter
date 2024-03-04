@@ -62,6 +62,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<XFile> selectedFiles = [];
+  bool isConverting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -119,14 +120,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   ElevatedButton(
-                    onPressed: () => _pickFile(context),
+                    onPressed: isConverting ? null : () => _pickFile(context),
                     child: const Text("Pick File"),
                   ),
                   const SizedBox(width: 10),
                   ElevatedButton(
-                    onPressed: selectedFiles.isNotEmpty ? () => _convertFiles(context) : null,
+                    onPressed: isConverting || selectedFiles.isEmpty ? null : () => _convertFiles(context),
                     child: const Text("Convert"),
                   ),
+                  if (isConverting) CircularProgressIndicator(), // Show loader if converting
                 ],
               ),
             ],
@@ -149,6 +151,10 @@ class _MyHomePageState extends State<MyHomePage> {
 Future<void> _convertFiles(BuildContext context) async {
   // Ensure there are selected files
   if (selectedFiles.isEmpty) return;
+
+  setState(() {
+    isConverting = true; // Set conversion status to true
+  });
 
   // Iterate through each selected file and perform conversion
   for (final file in selectedFiles) {
@@ -204,6 +210,10 @@ Future<void> _convertFiles(BuildContext context) async {
       }
     }
   }
+
+  setState(() {
+    isConverting = false; // Set conversion status to false after conversion is completed
+  });
 }
 
 
