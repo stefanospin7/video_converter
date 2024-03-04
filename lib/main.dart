@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
@@ -144,6 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+
 Future<void> _convertFiles(BuildContext context) async {
   // Ensure there are selected files
   if (selectedFiles.isEmpty) return;
@@ -152,38 +154,54 @@ Future<void> _convertFiles(BuildContext context) async {
   for (final file in selectedFiles) {
     // Check if the file is a webm file
     if (file.path.endsWith('.webm')) {
-      // Get the directory of the original file
-      final originalDir = file.path.split('/').sublist(0, file.path.split('/').length - 1).join('/');
-      
-      // Construct the path for the new mp4 file
-      final fileNameWithoutExtension = file.name.split('.').first;
-      final newFilePath = '$originalDir/$fileNameWithoutExtension.mp4';
-      
-      // Perform the conversion (replace with actual conversion logic)
-      // For demonstration purpose, just show a message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Converting ${file.name} to MP4..."),
-        ),
-      );
-      
-      // Simulate conversion process by delaying for 2 seconds (replace with actual conversion logic)
-      await Future.delayed(Duration(seconds: 2));
-      
-      // Show conversion success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("${file.name} converted to MP4 successfully!"),
-        ),
-      );
+      try {
+        // Construct FFmpeg command to convert WEBM to MP4
+        final process = await Process.start(
+          'ffmpeg',
+          [
+            '-i',
+            file.path,
+            '-vf',
+            'scale=trunc(iw/2)*2:trunc(ih/2)*2',
+            '${file.path.split('.')[0]}.mp4'
+          ],
+        );
 
-      // Simulate saving the converted file by copying the original file (replace with actual saving logic)
-      // For demonstration purpose, just show a message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Saving $newFilePath..."),
-        ),
-      );
+        // Handle stdout and stderr streams
+        process.stdout.listen((event) {
+          print('stdout: ${String.fromCharCodes(event)}');
+        });
+
+        process.stderr.listen((event) {
+          print('stderr: ${String.fromCharCodes(event)}');
+        });
+
+        // Wait for the conversion process to complete
+        final exitCode = await process.exitCode;
+
+        if (exitCode == 0) {
+          // Conversion successful
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Conversion of ${file.name} to MP4 completed!"),
+            ),
+          );
+        } else {
+          // Conversion failed
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Failed to convert ${file.name} to MP4"),
+            ),
+          );
+        }
+      } catch (e) {
+        // Error occurred during conversion
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error occurred during conversion: $e"),
+          ),
+        );
+      }
     }
   }
 }
