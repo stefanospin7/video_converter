@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
 import 'dart:io';
@@ -117,18 +118,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 thickness: 2,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton(
                     onPressed: isConverting ? null : () => _pickFile(context),
                     child: const Text("Pick File"),
                   ),
-                  const SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: isConverting || selectedFiles.isEmpty ? null : () => _convertFiles(context),
-                    child: const Text("Convert"),
-                  ),
-                  if (isConverting) CircularProgressIndicator(), // Show loader if converting
+                  if (!isConverting)
+                    ElevatedButton(
+                      onPressed: selectedFiles.isEmpty ? null : () => _convertFiles(context),
+                      child: const Text("Convert"),
+                    ),
+                  if (isConverting)
+                    Row(
+                      children: [
+                        const Text('Converting...'),
+                        const SizedBox(width: 5),
+                        SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(),
+                        ),
+                      ],
+                    )
                 ],
               ),
             ],
@@ -147,87 +159,77 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> _convertFiles(BuildContext context) async {
+    // Ensure there are selected files
+    if (selectedFiles.isEmpty) return;
 
-Future<void> _convertFiles(BuildContext context) async {
-  // Ensure there are selected files
-  if (selectedFiles.isEmpty) return;
+    setState(() {
+      isConverting = true; // Set conversion status to true
+    });
 
-  setState(() {
-    isConverting = true; // Set conversion status to true
-  });
+    // Iterate through each selected file and perform conversion
+    for (final file in selectedFiles) {
+      // Check if the file is a webm file
+      if (file.path.endsWith('.webm')) {
+        try {
+          // Construct output file path
+          final outputFilePath = '${file.path.split('.')[0]}.mp4';
 
-  // Iterate through each selected file and perform conversion
-  for (final file in selectedFiles) {
-    // Check if the file is a webm file
-    if (file.path.endsWith('.webm')) {
-      try {
-        // Construct output file path
-        final outputFilePath = '${file.path.split('.')[0]}.mp4';
+          // Check if the output file already exists
+          final outputFile = File(outputFilePath);
+          if (await outputFile.exists()) {
+            // Append 'copy' to the file name if it already exists
+            final outputFileName = '${file.path.split('.')[0]}_copy.mp4';
+            await outputFile.rename(outputFileName);
+          }
 
-        // Check if the output file already exists
-        final outputFile = File(outputFilePath);
-        if (await outputFile.exists()) {
-          // Append 'copy' to the file name if it already exists
-          final outputFileName = '${file.path.split('.')[0]}_copy.mp4';
-          await outputFile.rename(outputFileName);
-        }
+          // Construct FFmpeg command to convert WEBM to MP4
+          final process = await Process.start(
+            'ffmpeg',
+            [
+              '-i',
+              file.path,
+              '-vf',
+              'scale=trunc(iw/2)*2:trunc(ih/2)*2',
+              outputFilePath,
+            ],
+          );
 
-        // Construct FFmpeg command to convert WEBM to MP4
-        final process = await Process.start(
-          'ffmpeg',
-          [
-            '-i',
-            file.path,
-            '-vf',
-            'scale=trunc(iw/2)*2:trunc(ih/2)*2',
-            outputFilePath,
-          ],
-        );
+          // Handle stdout and stderr streams
+          process.stdout.listen((event) {
+            print('stdout: ${String.fromCharCodes(event)}');
+          });
 
-        // Handle stdout and stderr streams
-        process.stdout.listen((event) {
-          print('stdout: ${String.fromCharCodes(event)}');
-        });
+          process.stderr.listen((event) {
+            print('stderr: ${String.fromCharCodes(event)}');
+          });
 
-        process.stderr.listen((event) {
-          print('stderr: ${String.fromCharCodes(event)}');
-        });
+          // Wait for the conversion process to complete
+          await process.exitCode;
 
-        // Wait for the conversion process to complete
-        final exitCode = await process.exitCode;
-
-        if (exitCode == 0) {
           // Conversion successful
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("Conversion of ${file.name} to MP4 completed!"),
             ),
           );
-        } else {
-          // Conversion failed
+
+        } catch (e) {
+          // Error occurred during conversion
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Failed to convert ${file.name} to MP4"),
+              content: Text("Error occurred during conversion: $e"),
             ),
           );
         }
-      } catch (e) {
-        // Error occurred during conversion
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Error occurred during conversion: $e"),
-          ),
-        );
       }
     }
+
+    setState(() {
+      isConverting = false; // Set conversion status to false after conversion is completed
+      selectedFiles.clear(); // Clear the list of selected files
+    });
   }
-
-  setState(() {
-    isConverting = false; // Set conversion status to false after conversion is completed
-  });
-}
-
-
 
   Widget _getFileIcon(XFile file) {
     IconData iconData;
