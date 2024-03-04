@@ -216,11 +216,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
         } catch (e) {
           // Error occurred during conversion
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Error occurred during conversion: $e"),
-            ),
-          );
+      ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+    content: Text("Error occurred during conversion, or ffmpeg not installed: $e"),
+    duration: Duration(seconds: 10), 
+  ),
+);
+
         }
       }
     }
