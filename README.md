@@ -1,17 +1,22 @@
-# video_converter
+# Video Converter
 
-A new Flutter project.
+This repository contains a Flutter app designed to convert WebM files into MP4 format. 
 
-## Getting Started
+## Prerequisites
 
-This project is a starting point for a Flutter application.
+Before using the app, ensure that FFmpeg is installed on your system. If not, you can install it using the package manager specific to your Linux distribution:
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+sudo apt-get update
+sudo apt-get install ffmpeg
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# video_converter
+Development
+This app is developed for Debian Linux systems.
+
+TODO
+Make the app standalone without the need for FFmpeg installation (potentially using the Flutter FFmpeg package).
+Fix the window resizing issue.
+Add support for more video file types for conversion.
+Extend the app to be compatible with multiple operating systems.
+Feel free to contribute by addressing these TODO items or by submitting new features and enhancements. Your contributions are highly appreciated!
