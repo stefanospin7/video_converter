@@ -13,7 +13,7 @@ sudo apt-get install ffmpeg
 
 
 ## Download
-To use it just dowload the bundle folder inside the download repo, install ffmpeg and then click on the video_converter file
+To use it just dowload the app from the repo and install the file
 [DOWNLOAD THIS REPO](https://github.com/stefanospin7/video_converter_download)
 
 
