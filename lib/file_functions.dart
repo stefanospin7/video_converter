@@ -13,13 +13,6 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
   // Ensure there are selected files
   if (selectedFiles.isEmpty) return;
 
-  // Set conversion status to true
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text("Conversion started..."),
-    ),
-  );
-
   for (final file in selectedFiles) {
     if (file.path.endsWith('.webm')) {
       try {
@@ -50,24 +43,34 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
 
         await process.exitCode;
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Conversion of ${file.name} to MP4 completed!"),
-          ),
+        // Show completion dialog
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Conversion Completed"),
+              content: Text("Conversion of ${file.name} to MP4 completed!"),
+            );
+          },
         );
+
+        // Dismiss the completion dialog after 3 seconds
+        Future.delayed(const Duration(seconds: 3), () {
+          Navigator.of(context).pop();
+        });
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Error occurred during conversion: $e"),
-          ),
+        // Show error dialog
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Error Occurred or need to install ffmpeg"),
+              content: Text("Error occurred during conversion: $e"),
+            );
+          },
         );
+        return; // Exit the function immediately after showing the error dialog
       }
     }
   }
-
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text("Conversion completed!"),
-    ),
-  );
 }

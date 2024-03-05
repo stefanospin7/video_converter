@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Selected Files:",
+                "Selected one or multiple files:",
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -83,7 +83,7 @@ class HomePage extends StatelessWidget {
                   if (isConverting)
                     Row(
                       children: [
-                        const Text('Converting...'),
+                        const Text('Please wait, files are converting'),
                         const SizedBox(width: 5),
                         SizedBox(
                           width: 20,
