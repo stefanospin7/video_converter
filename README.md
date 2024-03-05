@@ -15,8 +15,8 @@ Development
 This app is developed for Debian Linux systems.
 
 ## Download
-To use it just run the video_converter file
-[Download Bundle Folder](https://github.com/stefanospin7/video_converter/tree/main/bundle)
+To use it just dowload the bundle folder inside the download repo, install ffmpeg and then click on the video_converter file
+[DOWNLOAD THIS REPO](https://github.com/stefanospin7/video_converter_download)
 
 
 TODO
