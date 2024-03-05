@@ -1,7 +1,8 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
-import 'dart:io';
+
+import 'home_page.dart';
+import 'file_functions.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: const MyHomePage(),
+      home: MyHomePage(),
     );
   }
 }
@@ -67,92 +68,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "WEBM Converter",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Selected Files:",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              const Divider(
-                color: Colors.black,
-                height: 20,
-                thickness: 2,
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: selectedFiles.length,
-                  itemBuilder: (context, index) {
-                    final file = selectedFiles[index];
-                    return ListTile(
-                      leading: _getFileIcon(file),
-                      title: Text(
-                        file.name,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const Divider(
-                color: Colors.black,
-                height: 20,
-                thickness: 2,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: isConverting ? null : () => _pickFile(context),
-                    child: const Text("Pick File"),
-                  ),
-                  if (!isConverting)
-                    ElevatedButton(
-                      onPressed: selectedFiles.isEmpty ? null : () => _convertFiles(context),
-                      child: const Text("Convert"),
-                    ),
-                  if (isConverting)
-                    Row(
-                      children: [
-                        const Text('Converting...'),
-                        const SizedBox(width: 5),
-                        SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(),
-                        ),
-                      ],
-                    )
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+    return HomePage(
+      selectedFiles: selectedFiles,
+      isConverting: isConverting,
+      pickFile: _pickFile,
+      convertFiles: _convertFiles,
     );
   }
 
   Future<void> _pickFile(BuildContext context) async {
-    final typeGroup = XTypeGroup(label: 'Video', extensions: ['webm']);
-    final files = await openFiles(acceptedTypeGroups: [typeGroup]);
+    final files = await pickFile(context);
 
     setState(() {
       selectedFiles = files;
@@ -160,89 +85,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _convertFiles(BuildContext context) async {
-    // Ensure there are selected files
-    if (selectedFiles.isEmpty) return;
-
     setState(() {
-      isConverting = true; // Set conversion status to true
+      isConverting = true;
     });
 
-    // Iterate through each selected file and perform conversion
-    for (final file in selectedFiles) {
-      // Check if the file is a webm file
-      if (file.path.endsWith('.webm')) {
-        try {
-          // Construct output file path
-          final outputFilePath = '${file.path.split('.')[0]}.mp4';
-
-          // Check if the output file already exists
-          final outputFile = File(outputFilePath);
-          if (await outputFile.exists()) {
-            // Append 'copy' to the file name if it already exists
-            final outputFileName = '${file.path.split('.')[0]}_copy.mp4';
-            await outputFile.rename(outputFileName);
-          }
-
-          // Construct FFmpeg command to convert WEBM to MP4
-          final process = await Process.start(
-            'ffmpeg',
-            [
-              '-i',
-              file.path,
-              '-vf',
-              'scale=trunc(iw/2)*2:trunc(ih/2)*2',
-              outputFilePath,
-            ],
-          );
-
-          // Handle stdout and stderr streams
-          process.stdout.listen((event) {
-            print('stdout: ${String.fromCharCodes(event)}');
-          });
-
-          process.stderr.listen((event) {
-            print('stderr: ${String.fromCharCodes(event)}');
-          });
-
-          // Wait for the conversion process to complete
-          await process.exitCode;
-
-          // Conversion successful
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Conversion of ${file.name} to MP4 completed!"),
-            ),
-          );
-
-        } catch (e) {
-          // Error occurred during conversion
-      ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-    content: Text("Error occurred during conversion, or ffmpeg not installed: $e"),
-    duration: Duration(seconds: 10), 
-  ),
-);
-
-        }
-      }
-    }
+    await convertFiles(context, selectedFiles);
 
     setState(() {
-      isConverting = false; // Set conversion status to false after conversion is completed
-      selectedFiles.clear(); // Clear the list of selected files
+      isConverting = false;
+      selectedFiles.clear();
     });
-  }
-
-  Widget _getFileIcon(XFile file) {
-    IconData iconData;
-    if (file.path.endsWith('.webm')) {
-      iconData = Icons.video_library;
-    } else {
-      iconData = Icons.file_copy;
-    }
-    return Icon(
-      iconData,
-      color: Colors.black,
-    );
   }
 }
