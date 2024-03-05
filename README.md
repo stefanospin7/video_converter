@@ -9,7 +9,7 @@ Before using the app, ensure that FFmpeg is installed on your system. If not, yo
 ```bash
 sudo apt-get update
 sudo apt-get install ffmpeg
-
+```
 
 Development
 This app is developed for Debian Linux systems.
