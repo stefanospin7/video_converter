@@ -64,7 +64,7 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Error Occurred or need to install ffmpeg"),
+              title: Text("Error occurred or ffmpeg installation required"),
               content: Text("Error occurred during conversion: $e"),
             );
           },
