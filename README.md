@@ -11,8 +11,6 @@ sudo apt-get update
 sudo apt-get install ffmpeg
 ```
 
-Development
-This app is developed for Debian Linux systems.
 
 ## Download
 To use it just dowload the bundle folder inside the download repo, install ffmpeg and then click on the video_converter file
