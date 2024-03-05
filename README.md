@@ -14,6 +14,11 @@ sudo apt-get install ffmpeg
 Development
 This app is developed for Debian Linux systems.
 
+## Download
+To use it just run the video_converter file
+[Download Bundle Folder](https://github.com/stefanospin7/video_converter/tree/main/bundle)
+
+
 TODO
 Make the app standalone without the need for FFmpeg installation (potentially using the Flutter FFmpeg package).
 Fix the window resizing issue.
