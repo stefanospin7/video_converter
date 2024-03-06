@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Selected one or multiple files:",
+                "Select one or multiple files:",
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

@@ -18,6 +18,7 @@ To use it just dowload the app from the repo and install the file
 
 
 TODO
+Change the select files label to selected files while converting
 Make the app standalone without the need for FFmpeg installation (potentially using the Flutter FFmpeg package).
 Fix the window resizing issue.
 Add support for more video file types for conversion.
