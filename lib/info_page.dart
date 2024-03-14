@@ -14,16 +14,16 @@ class InfoPage extends StatelessWidget {
           children: [
             _buildSectionTitle('App Info'),
             _buildSectionContent('This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :) You can take a look and contribute to the code here on GitHub:'),
-            _buildLinkWithCopyButton(context, 'GitHub', 'https://github.com/'),
+            _buildLinkWithCopyButton(context, 'GitHub Repo', 'https://github.com/'),
             _buildLinkWithCopyButton(context, 'For more information on ffmpeg', 'https://ffmpeg.org/'),
             _buildDivider(),
             _buildSectionTitle('Instructions'),
             _buildSectionContent('Currently, this app is designed to work only on Linux distributions, specifically Debian. You will need to install ffmpeg if you haven\'t already done so (sudo apt install ffmpeg), then launch the app, click on "pick file", select one or more files from the file manager, click "convert", and wait for the loader to finish without closing the app. Enjoy your converted files, which will be located in the same folder as the selected files :)'),
             _buildDivider(),
             _buildSectionTitle('Developer Info'),
-            _buildDeveloperInfo(context, 'Developer: Mario Rossi', 'https://github.com/stefanospin7'),
-            _buildDeveloperInfo(context, 'GitHub', 'https://github.com/stefanospin7'),
-            _buildDeveloperInfo(context, 'Twitter', 'https://twitter.com/stefanospinel15'),
+            _buildSectionContent('My name is Stefano Spinelli and I work as an iOS developer (Swift). In my free time, I enjoy making music and programming in various languages. If you want to contact me, get more information, give me advice, insult me for my code, or collaborate on the app, you can do so on Twitter via DMs. I also provide my GitHub if you want to follow me:'),
+            _buildLinkWithCopyButton(context, 'My GitHub page', 'https://github.com/stefanospin7'),
+            _buildLinkWithCopyButton(context, 'X(Twitter)', 'https://twitter.com/stefanospinel15'),
           ],
         ),
       ),
@@ -100,9 +100,5 @@ class InfoPage extends StatelessWidget {
       height: 20,
       thickness: 2,
     );
-  }
-
-  Widget _buildDeveloperInfo(BuildContext context, String title, String url) {
-    return _buildLinkWithCopyButton(context, title, url);
   }
 }
