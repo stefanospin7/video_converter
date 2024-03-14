@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class InfoPage extends StatelessWidget {
   @override
@@ -12,16 +13,17 @@ class InfoPage extends StatelessWidget {
         child: ListView(
           children: [
             _buildSectionTitle('App Info'),
-            _buildSectionContent('This app converts WEBM files to MP4.'),
+            _buildSectionContent('This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :) You can take a look and contribute to the code here on GitHub:'),
+            _buildLinkWithCopyButton(context, 'GitHub', 'https://github.com/'),
+            _buildLinkWithCopyButton(context, 'For more information on ffmpeg', 'https://ffmpeg.org/'),
             _buildDivider(),
             _buildSectionTitle('Instructions'),
-            _buildSectionContent('1. Pick one or multiple WEBM files.\n'
-                '2. Click the "Convert" button to start the conversion.'),
+            _buildSectionContent('Currently, this app is designed to work only on Linux distributions, specifically Debian. You will need to install ffmpeg if you haven\'t already done so (sudo apt install ffmpeg), then launch the app, click on "pick file", select one or more files from the file manager, click "convert", and wait for the loader to finish without closing the app. Enjoy your converted files, which will be located in the same folder as the selected files :)'),
             _buildDivider(),
             _buildSectionTitle('Developer Info'),
-            _buildSectionContent('Developer: [Your Name]\n'
-                'GitHub: [Your GitHub Link]\n'
-                'Twitter: [Your Twitter Link]'),
+            _buildDeveloperInfo(context, 'Developer: Mario Rossi', 'https://github.com/stefanospin7'),
+            _buildDeveloperInfo(context, 'GitHub', 'https://github.com/stefanospin7'),
+            _buildDeveloperInfo(context, 'Twitter', 'https://twitter.com/stefanospinel15'),
           ],
         ),
       ),
@@ -48,11 +50,49 @@ class InfoPage extends StatelessWidget {
     );
   }
 
+  Widget _buildLinkWithCopyButton(BuildContext context, String title, String url) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              // Open the URL in browser
+            },
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.blue,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.copy),
+            onPressed: () {
+              _copyToClipboard(url);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Link copied to clipboard')));
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _copyToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text));
+  }
+
   Widget _buildDivider() {
     return Divider(
       color: Colors.black,
       height: 20,
       thickness: 2,
     );
+  }
+
+  Widget _buildDeveloperInfo(BuildContext context, String title, String url) {
+    return _buildLinkWithCopyButton(context, title, url);
   }
 }
