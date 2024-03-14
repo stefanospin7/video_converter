@@ -3,6 +3,7 @@ import 'package:file_selector/file_selector.dart';
 
 import 'home_page.dart';
 import 'file_functions.dart';
+import 'info_page.dart'; // Import the InfoPage widget
 
 void main() {
   runApp(const MyApp());
@@ -68,11 +69,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return HomePage(
-      selectedFiles: selectedFiles,
-      isConverting: isConverting,
-      pickFile: _pickFile,
-      convertFiles: _convertFiles,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('WEBM Converter'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => InfoPage()),
+              );
+            },
+          ),
+        ],
+      ),
+      body: HomePage(
+        selectedFiles: selectedFiles,
+        isConverting: isConverting,
+        pickFile: _pickFile,
+        convertFiles: _convertFiles,
+      ),
     );
   }
 
