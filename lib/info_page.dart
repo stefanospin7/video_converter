@@ -50,35 +50,45 @@ class InfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLinkWithCopyButton(BuildContext context, String title, String url) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 5.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            onTap: () {
-              // Open the URL in browser
-            },
-            child: Text(
-              title,
-              style: TextStyle(
-                color: Colors.blue,
-                decoration: TextDecoration.underline,
+ Widget _buildLinkWithCopyButton(BuildContext context, String title, String url) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+        height: 1,
+        color: Colors.grey,
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                // Open the URL in browser
+              },
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
-          ),
-          IconButton(
-            icon: Icon(Icons.copy),
-            onPressed: () {
-              _copyToClipboard(url);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Link copied to clipboard')));
-            },
-          ),
-        ],
+            IconButton(
+              icon: Icon(Icons.copy),
+              onPressed: () {
+                _copyToClipboard(url);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Link copied to clipboard')));
+              },
+            ),
+          ],
+        ),
       ),
-    );
-  }
+    ],
+  );
+}
+
 
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
