@@ -20,6 +20,10 @@ To use it just dowload the app from the repo and install the file
 You can follow the installation steps here:
 [Video instruction Soon](https://www.youtube.com/)
 
+![Screenshot 1](./utils/photos/screenshot00.png)
+![screenshot 2](./utils/photos/screenshot01.png)
+![Screenshot 3](./utils/photos/screenshot02.png)
+
 
 ## TODO
 1. Make the app standalone without the need for FFmpeg installation (potentially using the Flutter FFmpeg package).
