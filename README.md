@@ -20,10 +20,10 @@ You can follow the installation steps here:
 [Video instruction Soon](https://www.youtube.com/)
 
 
-TODO
-Change the select files label to selected files while converting
-Make the app standalone without the need for FFmpeg installation (potentially using the Flutter FFmpeg package).
-Fix the window resizing issue.
-Add support for more video file types for conversion.
-Extend the app to be compatible with multiple operating systems.
+## TODO
+1. Make the app standalone without the need for FFmpeg installation (potentially using the Flutter FFmpeg package).
+2. Fix the window resizing issue.
+3. Add support for more video file types for conversion.
+4. Extend the app to be compatible with multiple operating systems.
+
 Feel free to contribute by addressing these TODO items or by submitting new features and enhancements. Your contributions are highly appreciated!
