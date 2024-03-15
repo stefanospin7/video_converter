@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class InfoPage extends StatelessWidget {
+  final String appVersion = '1.0.0'; // Define your app version here
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Info'),
+        title: Row(
+          children: [
+            Text('App version:'),
+            SizedBox(width: 8), // Add some space between 'Info' and version
+            _buildVersionLabel(),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -25,6 +33,24 @@ class InfoPage extends StatelessWidget {
             _buildLinkWithCopyButton(context, 'My GitHub page', 'https://github.com/stefanospin7'),
             _buildLinkWithCopyButton(context, 'X(Twitter)', 'https://twitter.com/stefanospinel15'),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildVersionLabel() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.blueAccent, // Choose your desired color
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        '$appVersion',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+          color: Colors.white,
         ),
       ),
     );
@@ -50,45 +76,44 @@ class InfoPage extends StatelessWidget {
     );
   }
 
- Widget _buildLinkWithCopyButton(BuildContext context, String title, String url) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Container(
-        height: 1,
-        color: Colors.grey,
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              onTap: () {
-                // Open the URL in browser
-              },
-              child: Text(
-                title,
-                style: TextStyle(
-                  color: Colors.blue,
-                  decoration: TextDecoration.underline,
+  Widget _buildLinkWithCopyButton(BuildContext context, String title, String url) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          height: 1,
+          color: Colors.grey,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // Open the URL in browser
+                },
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
-            ),
-            IconButton(
-              icon: Icon(Icons.copy),
-              onPressed: () {
-                _copyToClipboard(url);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Link copied to clipboard')));
-              },
-            ),
-          ],
+              IconButton(
+                icon: Icon(Icons.copy),
+                onPressed: () {
+                  _copyToClipboard(url);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Link copied to clipboard')));
+                },
+              ),
+            ],
+          ),
         ),
-      ),
-    ],
-  );
-}
-
+      ],
+    );
+  }
 
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
