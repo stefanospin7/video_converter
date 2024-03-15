@@ -22,7 +22,7 @@ class InfoPage extends StatelessWidget {
           children: [
             _buildSectionTitle('App Info'),
             _buildSectionContent('This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :) You can take a look and contribute to the code here on GitHub:'),
-            _buildLinkWithCopyButton(context, 'GitHub Repo', 'https://github.com/'),
+            _buildLinkWithCopyButton(context, 'GitHub Repo', 'https://github.com/stefanospin7/video_converter'),
             _buildLinkWithCopyButton(context, 'For more information on ffmpeg', 'https://ffmpeg.org/'),
             _buildDivider(),
             _buildSectionTitle('Instructions'),
