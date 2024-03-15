@@ -16,6 +16,9 @@ sudo apt-get install ffmpeg
 To use it just dowload the app from the repo and install the file
 [DOWNLOAD THIS REPO](https://github.com/stefanospin7/video_converter_download)
 
+You can follow the installation steps here:
+[Video instruction Soon](https://www.youtube.com/)
+
 
 TODO
 Change the select files label to selected files while converting
