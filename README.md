@@ -30,5 +30,6 @@ You can follow the installation steps here:
 3. Add support for more video file types for conversion.
 4. Extend the app to be compatible with multiple operating systems.
 5. Add conversion percentage of the files
+6. improve the installation process
 
 Feel free to contribute by addressing these TODO items or by submitting new features and enhancements. Your contributions are highly appreciated!
