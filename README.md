@@ -17,7 +17,7 @@ To use it just dowload the app from the repo and install the file
 [DOWNLOAD THIS REPO](https://github.com/stefanospin7/video_converter_download)
 
 You can follow the installation steps here:
-[Video instruction Soon](https://www.youtube.com/)
+[Video instructions](https://www.youtube.com/watch?v=AXRcRFt0kOE)
 
 ![Screenshot 1](./utils/photos/screenshot00.png)
 ![screenshot 2](./utils/photos/screenshot01.png)
