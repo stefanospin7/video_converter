@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     },
   );
 
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       title: 'WEBM Converter',
       theme: ThemeData(
         primarySwatch: customSwatch,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           iconTheme: IconThemeData(color: Colors.black),
@@ -51,13 +51,13 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -71,14 +71,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('WEBM Converter'),
+        title: const Text('WEBM Converter'),
         actions: [
           IconButton(
-            icon: Icon(Icons.info),
+            icon: const Icon(Icons.info),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => InfoPage()),
+                MaterialPageRoute(builder: (context) => const InfoPage()),
               );
             },
           ),

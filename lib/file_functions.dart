@@ -5,11 +5,12 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 
 Future<List<XFile>> pickFile(BuildContext context) async {
-  final typeGroup = XTypeGroup(label: 'Video', extensions: ['webm']);
+  const typeGroup = XTypeGroup(label: 'Video', extensions: ['webm']);
   return await openFiles(acceptedTypeGroups: [typeGroup]);
 }
 
-Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async {
+Future<void> convertFiles(
+    BuildContext context, List<XFile> selectedFiles) async {
   // Ensure there are selected files
   if (selectedFiles.isEmpty) return;
 
@@ -48,7 +49,7 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Conversion Completed"),
+              title: const Text("Conversion Completed"),
               content: Text("Conversion of ${file.name} to MP4 completed!"),
             );
           },
@@ -64,7 +65,8 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Error occurred or ffmpeg installation required"),
+              title:
+                  const Text("Error occurred or ffmpeg installation required"),
               content: Text("Error occurred during conversion: $e"),
             );
           },
