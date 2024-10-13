@@ -33,3 +33,5 @@ You can follow the installation steps here:
 6. improve the installation process
 
 Feel free to contribute by addressing these TODO items or by submitting new features and enhancements. Your contributions are highly appreciated!
+
+Test new git-cola commit
