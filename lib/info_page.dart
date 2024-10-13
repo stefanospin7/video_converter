@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class InfoPage extends StatelessWidget {
-  final String appVersion = '1.0.0'; // Define your app version here
+  final String appVersion = '1.0.0';
+
+  const InfoPage({super.key}); // Define your app version here
 
   @override
   Widget build(BuildContext context) {
@@ -10,8 +12,9 @@ class InfoPage extends StatelessWidget {
       appBar: AppBar(
         title: Row(
           children: [
-            Text('App version:'),
-            SizedBox(width: 8), // Add some space between 'Info' and version
+            const Text('App version:'),
+            const SizedBox(
+                width: 8), // Add some space between 'Info' and version
             _buildVersionLabel(),
           ],
         ),
@@ -21,17 +24,24 @@ class InfoPage extends StatelessWidget {
         child: ListView(
           children: [
             _buildSectionTitle('App Info'),
-            _buildSectionContent('This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :) You can take a look and contribute to the code here on GitHub:'),
-            _buildLinkWithCopyButton(context, 'GitHub Repo', 'https://github.com/stefanospin7/video_converter'),
-            _buildLinkWithCopyButton(context, 'For more information on ffmpeg', 'https://ffmpeg.org/'),
+            _buildSectionContent(
+                'This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :) You can take a look and contribute to the code here on GitHub:'),
+            _buildLinkWithCopyButton(context, 'GitHub Repo',
+                'https://github.com/stefanospin7/video_converter'),
+            _buildLinkWithCopyButton(context, 'For more information on ffmpeg',
+                'https://ffmpeg.org/'),
             _buildDivider(),
             _buildSectionTitle('Instructions'),
-            _buildSectionContent('Currently, this app is designed to work only on Linux distributions, specifically Debian. You will need to install ffmpeg if you haven\'t already done so (sudo apt install ffmpeg), then launch the app, click on "pick file", select one or more files from the file manager, click "convert", and wait for the loader to finish without closing the app. Enjoy your converted files, which will be located in the same folder as the selected files :)'),
+            _buildSectionContent(
+                'Currently, this app is designed to work only on Linux distributions, specifically Debian. You will need to install ffmpeg if you haven\'t already done so (sudo apt install ffmpeg), then launch the app, click on "pick file", select one or more files from the file manager, click "convert", and wait for the loader to finish without closing the app. Enjoy your converted files, which will be located in the same folder as the selected files :)'),
             _buildDivider(),
             _buildSectionTitle('Developer Info'),
-            _buildSectionContent('My name is Stefano Spinelli and I work as an iOS developer (Swift). In my free time, I enjoy making music and programming in various languages. If you want to contact me, get more information, give me advice, insult me for my code, or collaborate on the app, you can do so on Twitter via DMs. I also provide my GitHub if you want to follow me:'),
-            _buildLinkWithCopyButton(context, 'My GitHub page', 'https://github.com/stefanospin7'),
-            _buildLinkWithCopyButton(context, 'X(Twitter)', 'https://twitter.com/stefanospinel15'),
+            _buildSectionContent(
+                'My name is Stefano Spinelli and I work as an iOS developer (Swift). In my free time, I enjoy making music and programming in various languages. If you want to contact me, get more information, give me advice, insult me for my code, or collaborate on the app, you can do so on Twitter via DMs. I also provide my GitHub if you want to follow me:'),
+            _buildLinkWithCopyButton(
+                context, 'My GitHub page', 'https://github.com/stefanospin7'),
+            _buildLinkWithCopyButton(
+                context, 'X(Twitter)', 'https://twitter.com/stefanospinel15'),
           ],
         ),
       ),
@@ -40,14 +50,14 @@ class InfoPage extends StatelessWidget {
 
   Widget _buildVersionLabel() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.blueAccent, // Choose your desired color
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        '$appVersion',
-        style: TextStyle(
+        appVersion,
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 14,
           color: Colors.white,
@@ -61,7 +71,7 @@ class InfoPage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ),
@@ -76,7 +86,8 @@ class InfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLinkWithCopyButton(BuildContext context, String title, String url) {
+  Widget _buildLinkWithCopyButton(
+      BuildContext context, String title, String url) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -95,17 +106,18 @@ class InfoPage extends StatelessWidget {
                 },
                 child: Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.blue,
                     decoration: TextDecoration.underline,
                   ),
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.copy),
+                icon: const Icon(Icons.copy),
                 onPressed: () {
                   _copyToClipboard(url);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Link copied to clipboard')));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Link copied to clipboard')));
                 },
               ),
             ],
@@ -120,7 +132,7 @@ class InfoPage extends StatelessWidget {
   }
 
   Widget _buildDivider() {
-    return Divider(
+    return const Divider(
       color: Colors.black,
       height: 20,
       thickness: 2,
