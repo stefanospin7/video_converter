@@ -54,35 +54,53 @@ class HomePage extends StatelessWidget {
               const Divider(height: 20, thickness: 2),
               SizedBox(
                 width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ElevatedButton(
-                      onPressed: isConverting ? null : () => pickFile(context),
-                      child: const Text("Pick File"),
-                    ),
-                    const SizedBox(height: 10),
-                    if (!isConverting)
-                      ElevatedButton(
-                        onPressed: selectedFiles.isEmpty
-                            ? null
-                            : () => convertFiles(context),
-                        child: const Text("Convert"),
-                      ),
-                    if (isConverting)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: const [
-                          Text('Please wait, files are converting'),
-                          SizedBox(width: 5),
-                          SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Check if the available width is small enough to stack buttons vertically
+                    if (constraints.maxWidth < 300) {
+                      // Vertical layout when the width is less than 300
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ElevatedButton(
+                            onPressed:
+                                isConverting ? null : () => pickFile(context),
+                            child: const Text("Pick File"),
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: selectedFiles.isEmpty
+                                ? null
+                                : () => convertFiles(context),
+                            child: const Text("Convert"),
                           ),
                         ],
-                      ),
-                  ],
+                      );
+                    } else {
+                      // Horizontal layout when the width is 300 or more
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed:
+                                  isConverting ? null : () => pickFile(context),
+                              child: const Text("Pick File"),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: selectedFiles.isEmpty
+                                  ? null
+                                  : () => convertFiles(context),
+                              child: const Text("Convert"),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  },
                 ),
               ),
             ],
