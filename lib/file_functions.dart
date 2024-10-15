@@ -92,7 +92,7 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
               '-i', file.path,                  // Input file
               '-c:v', 'libx264',                // Transcode video to H.264
               '-preset', 'fast',                // Speed up the conversion
-              '-crf', '23',                     // Constant Rate Factor (quality control)
+              '-crf', '18',                     // Constant Rate Factor (quality control) 0 higher quality, 18 close to loseless, 51 very low quality
               '-c:a', 'aac',                    // Transcode audio to AAC
               '-b:a', '128k',                   // Set audio bitrate
               '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', // Ensure even resolution
