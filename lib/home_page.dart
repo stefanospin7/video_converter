@@ -68,33 +68,39 @@ class HomePage extends StatelessWidget {
                 height: 20,
                 thickness: 2,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: isConverting ? null : () => pickFile(context),
-                    child: const Text("Pick File"),
-                  ),
-                  if (!isConverting)
+              // Wrap the Row in a Flexible or Expanded to prevent overflow
+              SizedBox(
+                width: double.infinity,
+                child: Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
                     ElevatedButton(
-                      onPressed: selectedFiles.isEmpty
-                          ? null
-                          : () => convertFiles(context),
-                      child: const Text("Convert"),
+                      onPressed: isConverting ? null : () => pickFile(context),
+                      child: const Text("Pick File"),
                     ),
-                  if (isConverting)
-                    const Row(
-                      children: [
-                        Text('Please wait, files are converting'),
-                        SizedBox(width: 5),
-                        SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(),
-                        ),
-                      ],
-                    )
-                ],
+                    if (!isConverting)
+                      ElevatedButton(
+                        onPressed: selectedFiles.isEmpty
+                            ? null
+                            : () => convertFiles(context),
+                        child: const Text("Convert"),
+                      ),
+                    if (isConverting)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Text('Please wait, files are converting'),
+                          SizedBox(width: 5),
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
               ),
             ],
           ),
