@@ -11,38 +11,56 @@ class InfoPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Row(
+          mainAxisSize: MainAxisSize.min, // Prevents overflow by limiting width
           children: [
             const Text('App version:'),
-            const SizedBox(
-                width: 8), // Add some space between 'Info' and version
+            const SizedBox(width: 8), // Add some space between 'Info' and version
             _buildVersionLabel(),
           ],
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: ListView(
-          children: [
-            _buildSectionTitle('App Info'),
-            _buildSectionContent(
-                'This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :) You can take a look and contribute to the code here on GitHub:'),
-            _buildLinkWithCopyButton(context, 'GitHub Repo',
-                'https://github.com/stefanospin7/video_converter'),
-            _buildLinkWithCopyButton(context, 'For more information on ffmpeg',
-                'https://ffmpeg.org/'),
-            _buildDivider(),
-            _buildSectionTitle('Instructions'),
-            _buildSectionContent(
-                'Currently, this app is designed to work only on Linux distributions, specifically Debian. You will need to install ffmpeg if you haven\'t already done so (sudo apt install ffmpeg), then launch the app, click on "pick file", select one or more files from the file manager, click "convert", and wait for the loader to finish without closing the app. Enjoy your converted files, which will be located in the same folder as the selected files :)'),
-            _buildDivider(),
-            _buildSectionTitle('Developer Info'),
-            _buildSectionContent(
-                'My name is Stefano Spinelli and I work as an iOS developer (Swift). In my free time, I enjoy making music and programming in various languages. If you want to contact me, get more information, give me advice, insult me for my code, or collaborate on the app, you can do so on Twitter via DMs. I also provide my GitHub if you want to follow me:'),
-            _buildLinkWithCopyButton(
-                context, 'My GitHub page', 'https://github.com/stefanospin7'),
-            _buildLinkWithCopyButton(
-                context, 'X(Twitter)', 'https://twitter.com/stefanospinel15'),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSectionTitle('App Info'),
+              _buildSectionContent(
+                'This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :) You can take a look and contribute to the code here on GitHub:'
+              ),
+              _buildLinkWithCopyButton(
+                context,
+                'GitHub Repo',
+                'https://github.com/stefanospin7/video_converter'
+              ),
+              _buildLinkWithCopyButton(
+                context,
+                'For more information on ffmpeg',
+                'https://ffmpeg.org/'
+              ),
+              _buildDivider(),
+              _buildSectionTitle('Instructions'),
+              _buildSectionContent(
+                'Currently, this app is designed to work only on Linux distributions, specifically Debian. You will need to install ffmpeg if you haven\'t already done so (sudo apt install ffmpeg), then launch the app, click on "pick file", select one or more files from the file manager, click "convert", and wait for the loader to finish without closing the app. Enjoy your converted files, which will be located in the same folder as the selected files :)'
+              ),
+              _buildDivider(),
+              _buildSectionTitle('Developer Info'),
+              _buildSectionContent(
+                'My name is Stefano Spinelli and I work as an iOS developer (Swift). In my free time, I enjoy making music and programming in various languages. If you want to contact me, get more information, give me advice, insult me for my code, or collaborate on the app, you can do so on Twitter via DMs. I also provide my GitHub if you want to follow me:'
+              ),
+              _buildLinkWithCopyButton(
+                context,
+                'My GitHub page',
+                'https://github.com/stefanospin7'
+              ),
+              _buildLinkWithCopyButton(
+                context,
+                'X(Twitter)',
+                'https://twitter.com/stefanospinel15'
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -86,8 +104,7 @@ class InfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLinkWithCopyButton(
-      BuildContext context, String title, String url) {
+  Widget _buildLinkWithCopyButton(BuildContext context, String title, String url) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -98,17 +115,18 @@ class InfoPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () {
-                  // Open the URL in browser
-                },
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    // Open the URL in the browser
+                  },
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ),
