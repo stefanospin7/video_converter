@@ -1,7 +1,7 @@
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final List<XFile> selectedFiles;
   final bool isConverting;
   final Function(BuildContext) pickFile;
@@ -16,6 +16,13 @@ class HomePage extends StatelessWidget {
   });
 
   @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  bool _showSnackBar = false; // Track if SnackBar is already shown
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -26,6 +33,21 @@ class HomePage extends StatelessWidget {
               // Check if the available height is sufficient to show all components
               bool showFullContent = constraints.maxHeight > 300;
 
+              // Show SnackBar only if buttons are not visible and it hasn't been shown already
+              if (!showFullContent && !_showSnackBar) {
+                _showSnackBar = true; // Mark SnackBar as shown
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("This window is too small. Please enlarge it to fully access the app features."),
+                      duration: Duration(seconds: 3),
+                    ),
+                  );
+                });
+              } else if (showFullContent) {
+                _showSnackBar = false; // Reset when the buttons are visible
+              }
+
               // If the screen height is too small, show nothing
               if (!showFullContent) {
                 return const SizedBox.shrink();
@@ -35,7 +57,7 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    selectedFiles.isEmpty
+                    widget.selectedFiles.isEmpty
                         ? "Select one or multiple files:"
                         : "Selected files:",
                     style: const TextStyle(
@@ -46,9 +68,9 @@ class HomePage extends StatelessWidget {
                   const Divider(height: 20, thickness: 2),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: selectedFiles.length,
+                      itemCount: widget.selectedFiles.length,
                       itemBuilder: (context, index) {
-                        final file = selectedFiles[index];
+                        final file = widget.selectedFiles[index];
                         return ListTile(
                           leading: getFileIcon(file),
                           title: Text(
@@ -70,14 +92,14 @@ class HomePage extends StatelessWidget {
                             children: [
                               ElevatedButton(
                                 onPressed:
-                                    isConverting ? null : () => pickFile(context),
+                                    widget.isConverting ? null : () => widget.pickFile(context),
                                 child: const Text("Pick File"),
                               ),
                               const SizedBox(height: 10),
                               ElevatedButton(
-                                onPressed: selectedFiles.isEmpty || isConverting
+                                onPressed: widget.selectedFiles.isEmpty || widget.isConverting
                                     ? null
-                                    : () => convertFiles(context),
+                                    : () => widget.convertFiles(context),
                                 child: const Text("Convert"),
                               ),
                             ],
@@ -89,16 +111,16 @@ class HomePage extends StatelessWidget {
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed:
-                                      isConverting ? null : () => pickFile(context),
+                                      widget.isConverting ? null : () => widget.pickFile(context),
                                   child: const Text("Pick File"),
                                 ),
                               ),
                               const SizedBox(width: 20),
                               Expanded(
                                 child: ElevatedButton(
-                                  onPressed: selectedFiles.isEmpty || isConverting
+                                  onPressed: widget.selectedFiles.isEmpty || widget.isConverting
                                       ? null
-                                      : () => convertFiles(context),
+                                      : () => widget.convertFiles(context),
                                   child: const Text("Convert"),
                                 ),
                               ),
@@ -115,7 +137,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: isConverting
+      floatingActionButton: widget.isConverting
           ? Container(
               color: Colors.black.withOpacity(0.5),
               child: const Center(

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +22,7 @@ Future<void> convertFiles(
           final outputFileName = '${file.path.split('.')[0]}_copy.mp4';
           await outputFile.rename(outputFileName);
         }
+
         final process = await Process.start(
           'ffmpeg',
           [
@@ -45,32 +45,38 @@ Future<void> convertFiles(
         await process.exitCode;
 
         // Show completion dialog
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Conversion Completed"),
-              content: Text("Conversion of ${file.name} to MP4 completed!"),
-            );
-          },
-        );
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Conversion Completed"),
+                content: Text("Conversion of ${file.name} to MP4 completed!"),
+              );
+            },
+          );
 
-        // Dismiss the completion dialog after 3 seconds
-        Future.delayed(const Duration(seconds: 3), () {
-          Navigator.of(context).pop();
-        });
+          // Dismiss the completion dialog after 3 seconds
+          Future.delayed(const Duration(seconds: 3), () {
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            }
+          });
+        }
       } catch (e) {
-        // Show error dialog
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title:
-                  const Text("Error occurred or ffmpeg installation required"),
-              content: Text("Error occurred during conversion: $e"),
-            );
-          },
-        );
+        // Show error dialog safely
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title:
+                    const Text("Error occurred or ffmpeg installation required"),
+                content: Text("Error occurred during conversion: $e"),
+              );
+            },
+          );
+        }
         return; // Exit the function immediately after showing the error dialog
       }
     }
