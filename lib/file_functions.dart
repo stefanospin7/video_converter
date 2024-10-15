@@ -9,7 +9,8 @@ Future<List<XFile>> pickFile(BuildContext context) async {
   return await openFiles(acceptedTypeGroups: [typeGroup]);
 }
 
-Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async {
+Future<void> convertFiles(
+    BuildContext context, List<XFile> selectedFiles) async {
   if (selectedFiles.isEmpty) return;
 
   // Check if ffmpeg is installed
@@ -22,7 +23,8 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("FFmpeg not found"),
-            content: const Text("FFmpeg is not installed. Do you want to install it?"),
+            content: const Text(
+                "FFmpeg is not installed. Do you want to install it?"),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -59,12 +61,12 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
         final process = await Process.start(
           'ffmpeg',
           [
-            '-y',                             // Overwrite output files without asking
-            '-i', file.path,                  // Input file
-            '-c:v', 'copy',                   // Attempt to copy the video codec
-            '-c:a', 'copy',                   // Attempt to copy the audio codec
-            '-movflags', '+faststart',        // MP4 optimization
-            outputFilePath,                   // Output file
+            '-y', // Overwrite output files without asking
+            '-i', file.path, // Input file
+            '-c:v', 'copy', // Attempt to copy the video codec
+            '-c:a', 'copy', // Attempt to copy the audio codec
+            '-movflags', '+faststart', // MP4 optimization
+            outputFilePath, // Output file
           ],
           mode: ProcessStartMode.normal,
         );
@@ -88,17 +90,19 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
           final transcodeProcess = await Process.start(
             'ffmpeg',
             [
-              '-y',                             // Overwrite output files without asking
-              '-i', file.path,                  // Input file
-              '-c:v', 'libx264',                // Transcode video to H.264
-              '-preset', 'fast',                // Speed up the conversion
-              '-crf', '18',                     // Constant Rate Factor (quality control) 0 higher quality, 18 close to loseless, 51 very low quality
-              '-c:a', 'aac',                    // Transcode audio to AAC
-              '-b:a', '128k',                   // Set audio bitrate
-              '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', // Ensure even resolution
-              '-r', '120',                      // Fps
-              '-movflags', '+faststart',        // MP4 optimization for streaming
-              outputFilePath,                   // Output file
+              '-y', // Overwrite output files without asking
+              '-i', file.path, // Input file
+              '-c:v', 'libx264', // Transcode video to H.264
+              '-preset', 'fast', // Speed up the conversion
+              '-crf',
+              '18', // Constant Rate Factor (quality control) 0 higher quality, 18 close to loseless, 51 very low quality
+              '-c:a', 'aac', // Transcode audio to AAC
+              '-b:a', '128k', // Set audio bitrate
+              '-vf',
+              'scale=trunc(iw/2)*2:trunc(ih/2)*2', // Ensure even resolution
+              '-r', '120', // Fps
+              '-movflags', '+faststart', // MP4 optimization for streaming
+              outputFilePath, // Output file
             ],
             mode: ProcessStartMode.normal,
           );
@@ -216,9 +220,10 @@ Future<void> _installFfmpeg(BuildContext context) async {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Unsupported Distribution"),
-            content: const Text("Your Linux distribution is not supported for automatic installation."),
+          return const AlertDialog(
+            title: Text("Unsupported Distribution"),
+            content: Text(
+                "Your Linux distribution is not supported for automatic installation."),
           );
         },
       );
@@ -227,14 +232,20 @@ Future<void> _installFfmpeg(BuildContext context) async {
 }
 
 Future<bool> _isDebianBased() async {
-  return await _checkDistribution("debian") || await _checkDistribution("ubuntu");
+  return await _checkDistribution("debian") ||
+      await _checkDistribution("ubuntu");
 }
 
 Future<bool> _isRedHatBased() async {
-  return await _checkDistribution("fedora") || await _checkDistribution("centos");
+  return await _checkDistribution("fedora") ||
+      await _checkDistribution("centos");
 }
 
 Future<bool> _checkDistribution(String keyword) async {
   final result = await Process.run('lsb_release', ['-is']);
-  return result.stdout.toString().trim().toLowerCase().contains(keyword); // Use result.stdout directly
+  return result.stdout
+      .toString()
+      .trim()
+      .toLowerCase()
+      .contains(keyword); // Use result.stdout directly
 }
