@@ -55,15 +55,16 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
           await outputFile.rename(outputFileName);
         }
 
-        // Start the ffmpeg process
+        // First try using copy for audio/video streams for a faster conversion
         final process = await Process.start(
           'ffmpeg',
           [
-            '-i',
-            file.path,
-            '-vf',
-            'scale=trunc(iw/2)*2:trunc(ih/2)*2',
-            outputFilePath,
+            '-y',                             // Overwrite output files without asking
+            '-i', file.path,                  // Input file
+            '-c:v', 'copy',                   // Attempt to copy the video codec
+            '-c:a', 'copy',                   // Attempt to copy the audio codec
+            '-movflags', '+faststart',        // MP4 optimization
+            outputFilePath,                   // Output file
           ],
           mode: ProcessStartMode.normal,
         );
@@ -78,7 +79,39 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
         });
 
         // Wait for the process to finish
-        await process.exitCode;
+        int exitCode = await process.exitCode;
+
+        // If the process fails (i.e., codecs are incompatible), fallback to transcoding
+        if (exitCode != 0) {
+          print('Copy failed, falling back to transcoding...');
+
+          final transcodeProcess = await Process.start(
+            'ffmpeg',
+            [
+              '-y',                             // Overwrite output files without asking
+              '-i', file.path,                  // Input file
+              '-c:v', 'libx264',                // Transcode video to H.264
+              '-preset', 'fast',                // Speed up the conversion
+              '-crf', '23',                     // Constant Rate Factor (quality control)
+              '-c:a', 'aac',                    // Transcode audio to AAC
+              '-b:a', '128k',                   // Set audio bitrate
+              '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', // Ensure even resolution
+              '-movflags', '+faststart',        // MP4 optimization for streaming
+              outputFilePath,                   // Output file
+            ],
+            mode: ProcessStartMode.normal,
+          );
+
+          transcodeProcess.stdout.transform(utf8.decoder).listen((event) {
+            print('stdout: $event');
+          });
+
+          transcodeProcess.stderr.transform(utf8.decoder).listen((event) {
+            print('stderr: $event');
+          });
+
+          await transcodeProcess.exitCode;
+        }
 
         // Show completion dialog
         if (context.mounted) {
