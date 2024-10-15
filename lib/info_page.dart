@@ -70,7 +70,7 @@ class InfoPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.blueAccent, // Choose your desired color
+        color: const Color(0xFFBB86FC), // Choose your desired color
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
@@ -92,6 +92,7 @@ class InfoPage extends StatelessWidget {
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,
+          color: Colors.white, // Change text color to white for dark mode
         ),
       ),
     );
@@ -100,7 +101,10 @@ class InfoPage extends StatelessWidget {
   Widget _buildSectionContent(String content) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
-      child: Text(content),
+      child: Text(
+        content,
+        style: const TextStyle(color: Colors.white70), // Lighten the content text
+      ),
     );
   }
 
@@ -108,10 +112,7 @@ class InfoPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          height: 1,
-          color: Colors.grey,
-        ),
+        const Divider(color: Colors.white70), // Change divider color for dark mode
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: Row(
@@ -119,19 +120,19 @@ class InfoPage extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    // Open the URL in the browser
+                    // Open the URL in the browser (implement with url_launcher package)
                   },
                   child: Text(
                     title,
                     style: const TextStyle(
-                      color: Colors.blue,
+                      color: Color(0xFFBB86FC), // Light purple for links
                       decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.copy),
+                icon: const Icon(Icons.copy, color: Colors.white), // Change icon color for dark mode
                 onPressed: () {
                   _copyToClipboard(url);
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -151,9 +152,9 @@ class InfoPage extends StatelessWidget {
 
   Widget _buildDivider() {
     return const Divider(
-      color: Colors.black,
+      color: Colors.white70, // Change divider color for dark mode
       height: 20,
-      thickness: 2,
+      thickness: 1,
     );
   }
 }
