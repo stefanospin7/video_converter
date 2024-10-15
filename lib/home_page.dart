@@ -17,13 +17,21 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: SingleChildScrollView(
-              child: Column(
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              // Check if the available height is sufficient to show all components
+              bool showFullContent = constraints.maxHeight > 300;
+
+              // If the screen height is too small, show nothing
+              if (!showFullContent) {
+                return const SizedBox.shrink();
+              }
+
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -36,10 +44,8 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const Divider(height: 20, thickness: 2),
-                  SizedBox(
-                    height: 200,
+                  Expanded(
                     child: ListView.builder(
-                      shrinkWrap: true,
                       itemCount: selectedFiles.length,
                       itemBuilder: (context, index) {
                         final file = selectedFiles[index];
@@ -58,9 +64,7 @@ class HomePage extends StatelessWidget {
                     width: double.infinity,
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        // Check if the available width is small enough to stack buttons vertically
                         if (constraints.maxWidth < 300) {
-                          // Vertical layout when the width is less than 300
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
@@ -79,7 +83,6 @@ class HomePage extends StatelessWidget {
                             ],
                           );
                         } else {
-                          // Horizontal layout when the width is 300 or more
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -105,20 +108,21 @@ class HomePage extends StatelessWidget {
                       },
                     ),
                   ),
+                  const SizedBox(height: 20),
                 ],
-              ),
-            ),
+              );
+            },
           ),
         ),
-        // Loader overlay when isConverting is true
-        if (isConverting)
-          Container(
-            color: Colors.black.withOpacity(0.5), // Semi-transparent background
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
-      ],
+      ),
+      floatingActionButton: isConverting
+          ? Container(
+              color: Colors.black.withOpacity(0.5),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : null,
     );
   }
 
