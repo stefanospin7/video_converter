@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart'; // Import url_launcher
 
 class InfoPage extends StatelessWidget {
-  final String appVersion = '1.0.0';
+  final String appVersion = '1.0.1';
 
   const InfoPage({super.key}); // Define your app version here
 
@@ -13,7 +13,6 @@ class InfoPage extends StatelessWidget {
         title: LayoutBuilder(
           builder: (context, constraints) {
             if (constraints.maxWidth < 200) {
-              // If the width is less than 200, display the text in a column
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -22,7 +21,6 @@ class InfoPage extends StatelessWidget {
                 ],
               );
             } else {
-              // Otherwise, display them side by side
               return Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -44,22 +42,18 @@ class InfoPage extends StatelessWidget {
               _buildSectionTitle('App Info'),
               _buildSectionContent(
                   'This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :) You can take a look and contribute to the code here on GitHub:'),
-              _buildLinkWithCopyButton(context, 'GitHub Repo',
-                  'https://github.com/stefanospin7/video_converter'),
-              _buildLinkWithCopyButton(context,
-                  'For more information on ffmpeg', 'https://ffmpeg.org/'),
+              _buildLink('GitHub Repo', 'https://github.com/stefanospin7/video_converter'),
+              _buildLink('For more information on ffmpeg', 'https://ffmpeg.org/'),
               _buildDivider(),
               _buildSectionTitle('Instructions'),
               _buildSectionContent(
-                  'Currently, this app is designed to work only on Linux distributions, specifically Debian. You will need to install ffmpeg if you haven\'t already done so (sudo apt install ffmpeg), then launch the app, click on "pick file", select one or more files from the file manager, click "convert", and wait for the loader to finish without closing the app. Enjoy your converted files, which will be located in the same folder as the selected files :)'),
+                  'Currently, this app is designed to work only on Linux distributions, specifically Debian or Red Hat based distros. You will need to install ffmpeg if you haven\'t already done so (sudo apt install ffmpeg), then launch the app, click on "pick file", select one or more files from the file manager, click "convert", and wait for the loader to finish without closing the app. Enjoy your converted files, which will be located in the same folder as the selected files :)'),
               _buildDivider(),
               _buildSectionTitle('Developer Info'),
               _buildSectionContent(
                   'My name is Stefano Spinelli and I work as an iOS developer (Swift). In my free time, I enjoy making music and programming in various languages. If you want to contact me, get more information, give me advice, insult me for my code, or collaborate on the app, you can do so on Twitter via DMs. I also provide my GitHub if you want to follow me:'),
-              _buildLinkWithCopyButton(
-                  context, 'My GitHub page', 'https://github.com/stefanospin7'),
-              _buildLinkWithCopyButton(
-                  context, 'X(Twitter)', 'https://twitter.com/stefanospinel15'),
+              _buildLink('My GitHub page', 'https://github.com/stefanospin7'),
+              _buildLink('X(Twitter)', 'https://twitter.com/stefanospinel15'),
             ],
           ),
         ),
@@ -110,49 +104,33 @@ class InfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLinkWithCopyButton(
-      BuildContext context, String title, String url) {
+  Widget _buildLink(String title, String url) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Divider(
-            color: Colors.white70), // Change divider color for dark mode
+        const Divider(color: Colors.white70), // Change divider color for dark mode
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    // Open the URL in the browser (implement with url_launcher package)
-                  },
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      color: Color(0xFFBB86FC), // Light purple for links
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
+          child: GestureDetector(
+            onTap: () async {
+              // Open the URL in the default browser
+              if (await canLaunch(url)) {
+                await launch(url);
+              } else {
+                throw 'Could not launch $url';
+              }
+            },
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: Color(0xFFBB86FC), // Light purple for links
+                decoration: TextDecoration.underline,
               ),
-              IconButton(
-                icon: const Icon(Icons.copy,
-                    color: Colors.white), // Change icon color for dark mode
-                onPressed: () {
-                  _copyToClipboard(url);
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Link copied to clipboard')));
-                },
-              ),
-            ],
+            ),
           ),
         ),
       ],
     );
-  }
-
-  void _copyToClipboard(String text) {
-    Clipboard.setData(ClipboardData(text: text));
   }
 
   Widget _buildDivider() {
