@@ -31,6 +31,7 @@ You can follow the installation steps here:
 4. Extend the app to be compatible with multiple operating systems.
 5. Add conversion percentage of the files
 6. improve the installation process (done)
+7. Add quality selection and fps selection
 
 !!!Approximately 12 times faster!!!
 
