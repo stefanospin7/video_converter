@@ -96,6 +96,7 @@ Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async
               '-c:a', 'aac',                    // Transcode audio to AAC
               '-b:a', '128k',                   // Set audio bitrate
               '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', // Ensure even resolution
+              '-r', '120',                      // Fps
               '-movflags', '+faststart',        // MP4 optimization for streaming
               outputFilePath,                   // Output file
             ],
