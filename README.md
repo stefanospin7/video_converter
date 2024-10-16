@@ -1,6 +1,7 @@
 # WEBM converter v 1.0.1
 
-![icon](./utils/icon/icon.png)
+<img src="./utils/icon/icon.png" alt="icon" width="800" />
+
 
 This app currently allows you to convert webm files to mp4 files in linux. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :)
 
