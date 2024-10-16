@@ -4,12 +4,12 @@ This app currently allows you to convert webm files to mp4 files in linux. This 
 
 ## About v 1.0.1
 
-### This is the second updated version of this app, bringing numerous improvements and bug fixes, including:\n\n'
-    - A conversion speed approximately 12x faster than the previous version.
-    - Better resulting video quality (both in fps and frame resolution).
-    - Fixes the conversion crash bug for large files.
-    - A modern, darker graphic redesign to reduce eye strain.
-    - Fixed image resizing bugs.
+This is the second updated version of this app, bringing numerous improvements and bug fixes, including:
+1. A conversion speed approximately 12x faster than the previous version.
+2. Better resulting video quality (both in fps and frame resolution).
+3. Fixes the conversion crash bug for large files.
+4. A modern, darker graphic redesign to reduce eye strain.
+5. Fixed image resizing bugs.
 
 
 ## Prerequisites
