@@ -31,7 +31,7 @@ You can follow the installation steps here:
 [Video instructions](https://www.youtube.com/watch?v=AXRcRFt0kOE)
 
 ![Screenshot 1](./utils/photos/screenshot00.png)
-![screenshot 2](./utils/photos/screenshot01.png)
+![screenshot 2](./utils/photos/screenshot04b.png)
 ![Screenshot 3](./utils/photos/screenshot02b.png)
 
 
