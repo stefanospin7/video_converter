@@ -32,7 +32,7 @@ You can follow the installation steps here:
 
 ![Screenshot 1](./utils/photos/screenshot00.png)
 ![screenshot 2](./utils/photos/screenshot01.png)
-![Screenshot 3](./utils/photos/screenshot02.png)
+![Screenshot 3](./utils/photos/screenshot02b.png)
 
 
 ## TODO
