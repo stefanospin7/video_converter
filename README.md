@@ -46,5 +46,3 @@ You can follow the installation steps here:
 !!!Approximately 12 times faster!!!
 
 Feel free to contribute by addressing these TODO items or by submitting new features and enhancements. Your contributions are highly appreciated!
-
-windows test
