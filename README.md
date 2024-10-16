@@ -9,7 +9,7 @@ This is the second updated version of this app, bringing numerous improvements a
 2. Better resulting video quality (both in fps and frame resolution).
 3. Fixes the conversion crash bug for large files.
 4. A modern, darker graphic redesign to reduce eye strain.
-5. Fixed image resizing bugs.
+5. Fixed windows resizing bugs.
 
 
 ## Prerequisites
