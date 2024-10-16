@@ -38,37 +38,39 @@ class InfoPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-children: [
-  _buildSectionTitle('App Info'),
-  _buildSectionContent(
-      'This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :) You can take a look and contribute to the code here on GitHub:'),
-  _buildLink('GitHub Repo', 'https://github.com/stefanospin7/video_converter'),
-  _buildLink('For more information on ffmpeg', 'https://ffmpeg.org/'),
-  _buildDivider(),
+            children: [
+              _buildSectionTitle('App Info'),
+              _buildSectionContent(
+                  'This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :) You can take a look and contribute to the code here on GitHub:'),
+              _buildLink('GitHub Repo',
+                  'https://github.com/stefanospin7/video_converter'),
+              _buildLink(
+                  'For more information on ffmpeg', 'https://ffmpeg.org/'),
+              _buildDivider(),
 
-  // New section for Version Info
-  _buildSectionTitle('Version 1.0.1'),
-  _buildSectionContent(
-      'This is the second updated version of this app, bringing numerous improvements and bug fixes, including:\n\n'
-      '- A conversion speed approximately 12x faster than the previous version.\n'
-      '- Better resulting video quality (both in fps and frame resolution).\n'
-      '- Fixes the conversion crash bug for large files.\n'
-      '- A modern, darker graphic redesign to reduce eye strain.\n'
-      '- Fixed windows resizing bugs.\n'
-      '- Added a handler to manage the installation of ffmpeg directly from the app.'),
+              // New section for Version Info
+              _buildSectionTitle('Version 1.0.1'),
+              _buildSectionContent(
+                  'This is the second updated version of this app, bringing numerous improvements and bug fixes, including:\n\n'
+                  '- A conversion speed approximately 12x faster than the previous version.\n'
+                  '- Better resulting video quality (both in fps and frame resolution).\n'
+                  '- Fixes the conversion crash bug for large files.\n'
+                  '- A modern, darker graphic redesign to reduce eye strain.\n'
+                  '- Fixed windows resizing bugs.\n'
+                  '- Added a handler to manage the installation of ffmpeg directly from the app.\n'
+                  '- The creation of a new icon!\n'),
 
-  _buildDivider(),
-  _buildSectionTitle('Instructions'),
-  _buildSectionContent(
-      'Currently, this app is designed to work only on Linux distributions, specifically Debian or Red Hat based distros. You will need to install ffmpeg if you haven\'t already done so (sudo apt install ffmpeg), then launch the app, click on "pick file", select one or more files from the file manager, click "convert", and wait for the loader to finish without closing the app. Enjoy your converted files, which will be located in the same folder as the selected files :)'),
-  _buildDivider(),
-  _buildSectionTitle('Developer Info'),
-  _buildSectionContent(
-      'My name is Stefano Spinelli and I work as an iOS developer (Swift). In my free time, I enjoy making music and programming in various languages. If you want to contact me, get more information, give me advice, insult me for my code, or collaborate on the app, you can do so on Twitter via DMs. I also provide my GitHub if you want to follow me:'),
-  _buildLink('My GitHub page', 'https://github.com/stefanospin7'),
-  _buildLink('X(Twitter)', 'https://twitter.com/stefanospinel15'),
-],
-
+              _buildDivider(),
+              _buildSectionTitle('Instructions'),
+              _buildSectionContent(
+                  'Currently, this app is designed to work only on Linux distributions, specifically Debian or Red Hat based distros. You will need to install ffmpeg if you haven\'t already done so (sudo apt install ffmpeg), then launch the app, click on "pick file", select one or more files from the file manager, click "convert", and wait for the loader to finish without closing the app. Enjoy your converted files, which will be located in the same folder as the selected files :)'),
+              _buildDivider(),
+              _buildSectionTitle('Developer Info'),
+              _buildSectionContent(
+                  'My name is Stefano Spinelli and I work as an iOS developer (Swift). In my free time, I enjoy making music and programming in various languages. If you want to contact me, get more information, give me advice, insult me for my code, or collaborate on the app, you can do so on Twitter via DMs. I also provide my GitHub if you want to follow me:'),
+              _buildLink('My GitHub page', 'https://github.com/stefanospin7'),
+              _buildLink('X(Twitter)', 'https://twitter.com/stefanospinel15'),
+            ],
           ),
         ),
       ),
@@ -122,7 +124,8 @@ children: [
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Divider(color: Colors.white70), // Change divider color for dark mode
+        const Divider(
+            color: Colors.white70), // Change divider color for dark mode
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: GestureDetector(
