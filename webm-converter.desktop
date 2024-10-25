@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=WebM Converter
+Comment=A Flutter app for converting webm files to mp4 files
+Exec=webm-converter
+Icon=utils/icon/icon1.png
+Terminal=false
+Type=Application
+Categories=Utility;
+

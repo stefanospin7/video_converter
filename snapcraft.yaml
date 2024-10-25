@@ -1,0 +1,43 @@
+snapcrat.yaml:
+
+name: webm-converter  # Name of your app as it appears in the Snap Store
+base: core22          # The base snap to use (Ubuntu 20.04)
+version: '1.0.1'      # The version of your app
+summary: A Flutter app for converting webm files to mp4 files  # Short description
+description: |
+  This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files.
+
+grade: stable         # Use 'devel' for development versions
+confinement: classic   # Use 'strict' confinement for better security
+
+icon: utils/icon/icon1.png  # Path to the icon file
+
+apps:
+  webm-converter:
+    command: ./video_converter  
+    plugs:
+      - network               # Access to the network for online resources
+      - home                  # Access to user home directory
+      - x11                   # Access to X11 for GUI applications
+      - wayland               # Access to Wayland (if applicable)
+      - opengl                # Access to OpenGL for rendering
+
+parts:
+  video-converter:
+    plugin: dump
+    source: build/linux/x64/release/bundle
+    stage-packages:
+      - libgtk-3-0             # Required for GTK applications
+      - libwebkit2gtk-4.0-37    # Required for rendering web content
+      - libstdc++6              # Required for C++ standard library
+      - ffmpeg                  # If your app uses FFmpeg for conversion
+      - libavcodec-extra        # Additional FFmpeg codecs
+      - shared-mime-info
+      - libgdk-pixbuf-2.0-0
+      - libgdk-pixbuf2.0-bin
+      - libgdk-pixbuf2.0-common
+      - hicolor-icon-theme      # Hicolor icon theme for icons
+      
+      
+      
+      
