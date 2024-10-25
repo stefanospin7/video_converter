@@ -1,5 +1,3 @@
-snapcrat.yaml:
-
 name: webm-converter  # Name of your app as it appears in the Snap Store
 base: core22          # The base snap to use (Ubuntu 20.04)
 version: '1.0.1'      # The version of your app
