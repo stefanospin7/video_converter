@@ -1,6 +1,6 @@
 # WEBM converter v 1.0.1
 
-<img src="./utils/icon/icon.png" alt="icon" width="300" />
+<img src="./utils/icon/icon1.png" alt="icon" width="300" />
 
 
 This app currently allows you to convert webm files to mp4 files in linux. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :)
@@ -49,3 +49,16 @@ You can follow the installation steps here:
 
 
 Feel free to contribute by addressing these TODO items or by submitting new features and enhancements. Your contributions are highly appreciated!
+
+## UTILS
+
+Clean/restart the project:
+flutter clean
+snapcraft clean
+flutter build linux
+
+Build the Snap Package:
+command "snapcraft" in the snapcraft.yaml file dir
+
+Test the Snap Package:
+sudo snap install --dangerous my-flutter-app_1.0.0_amd64.snap
