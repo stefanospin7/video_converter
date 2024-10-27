@@ -1,5 +1,5 @@
 name: webm-converter  # Name of your app as it appears in the Snap Store
-base: core22          # The base snap to use (Ubuntu 20.04)
+base: core22          # The base snap to use (Ubuntu 22)
 version: '1.0.1'      # The version of your app
 summary: A Flutter app for converting webm files to mp4 files  # Short description
 description: |
@@ -12,13 +12,15 @@ icon: utils/icon/icon1.png  # Path to the icon file
 
 apps:
   webm-converter:
-    command: ./video_converter  
+    command: ./video_converter 
+    desktop: webm-converter.desktop 
     plugs:
       - network               # Access to the network for online resources
       - home                  # Access to user home directory
       - x11                   # Access to X11 for GUI applications
       - wayland               # Access to Wayland (if applicable)
       - opengl                # Access to OpenGL for rendering
+
 
 parts:
   video-converter:
