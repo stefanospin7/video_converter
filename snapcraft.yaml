@@ -8,7 +8,7 @@ description: |
 grade: stable         # Use 'devel' for development versions
 confinement: classic   # Use 'strict' confinement for better security
 
-icon: utils/icon/icon1.png  # Path to the icon file
+icon: utils/icon/icon_512p_circle.png  # Path to the icon file
 
 apps:
   webm-converter:
