@@ -57,8 +57,14 @@ flutter clean
 snapcraft clean
 flutter build linux
 
+
+
+
 Build the Snap Package:
 command "snapcraft" in the snapcraft.yaml file dir
+
+LXD installation problem:
+after adding the user in the lxd group reboot the system, restart session doesn't work
 
 Test the Snap Package:
 sudo snap install --dangerous --classic my-flutter-app_1.0.0_amd64.snap 
