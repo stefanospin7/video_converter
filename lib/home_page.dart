@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +22,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _showSnackBar = false; // Track if SnackBar is already shown
+  bool _initTimeElapsed = false; // Flag to delay the initial check
+
+  @override
+  void initState() {
+    super.initState();
+    // Start a timer to set _initTimeElapsed to true after 3 seconds
+    Timer(const Duration(seconds: 3), () {
+      setState(() {
+        _initTimeElapsed = true;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +43,10 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(20),
           child: LayoutBuilder(
             builder: (context, constraints) {
-              // Check if the available height is sufficient to show all components
               bool showFullContent = constraints.maxHeight > 300;
 
-              // Show SnackBar only if buttons are not visible and it hasn't been shown already
-              if (!showFullContent && !_showSnackBar) {
+              // Only show the SnackBar if the timer has elapsed and the screen is too small (this prevent initial unwanted warnings)
+              if (_initTimeElapsed && !showFullContent && !_showSnackBar) {
                 _showSnackBar = true; // Mark SnackBar as shown
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   ScaffoldMessenger.of(context).showSnackBar(
