@@ -71,3 +71,6 @@ sudo snap install --dangerous --classic my-flutter-app_1.0.0_amd64.snap
 
 Add the .desktop to bundle:
 cp webm-converter.desktop build/linux/x64/release/bundle/
+
+register app name:
+https://dashboard.snapcraft.io/
