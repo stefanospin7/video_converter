@@ -58,7 +58,8 @@ snapcraft clean
 flutter build linux
 
 
-
+Add the .desktop to bundle:
+cp webm-converter.desktop build/linux/x64/release/bundle/
 
 Build the Snap Package:
 command "snapcraft" in the snapcraft.yaml file dir
@@ -69,8 +70,6 @@ after adding the user in the lxd group reboot the system, restart session doesn'
 Test the Snap Package:
 sudo snap install --dangerous --classic my-flutter-app_1.0.0_amd64.snap 
 
-Add the .desktop to bundle:
-cp webm-converter.desktop build/linux/x64/release/bundle/
 
 register app name:
 https://dashboard.snapcraft.io/
