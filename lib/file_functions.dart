@@ -157,6 +157,13 @@ Future<void> convertFiles(
 }
 
 Future<bool> _checkFfmpegInstallation() async {
+  // Check if running in a Snap environment
+  if (Platform.environment.containsKey('SNAP')) {
+    // Assume FFmpeg is available in Snap package
+    return true;
+  }
+
+  // Otherwise, proceed with regular FFmpeg check
   try {
     final result = await Process.run('ffmpeg', ['-version']);
     return result.exitCode == 0; // 0 means ffmpeg is installed
@@ -164,6 +171,7 @@ Future<bool> _checkFfmpegInstallation() async {
     return false; // Error occurred, ffmpeg is not installed
   }
 }
+
 
 Future<void> _installFfmpeg(BuildContext context) async {
   String installCommand;

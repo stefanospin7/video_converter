@@ -73,3 +73,6 @@ sudo snap install --dangerous --classic my-flutter-app_1.0.0_amd64.snap
 
 register app name:
 https://dashboard.snapcraft.io/
+
+Use this to use previous snapcraft versions (to support core 18)
+sudo snap refresh snapcraft --channel=7.x --classic
