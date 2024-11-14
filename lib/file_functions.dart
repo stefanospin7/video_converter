@@ -4,6 +4,11 @@ import 'dart:io';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 
+//  ***IMPORTANT***
+//  This pararrel flow for snap/flutter environment breaks the flutter conversion
+//  use other branches to run it from flutter
+//  I hope to fix this in future
+
 // Function to pick .webm files
 Future<List<XFile>> pickFile(BuildContext context) async {
   const typeGroup = XTypeGroup(label: 'Video', extensions: ['webm']);
