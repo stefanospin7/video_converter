@@ -10,22 +10,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  static const customSwatch = MaterialColor(
-    0xFF007AFF,
-    <int, Color>{
-      50: Color(0xFFE5F3FF),
-      100: Color(0xFFBFD9FF),
-      200: Color(0xFF99BEFF),
-      300: Color(0xFF73A4FF),
-      400: Color(0xFF4D8AFF),
-      500: Color(0xFF007AFF),
-      600: Color(0xFF0066E6),
-      700: Color(0xFF005CD1),
-      800: Color(0xFF0052BD),
-      900: Color(0xFF0047A3),
-    },
-  );
-
   const MyApp({super.key});
 
   @override
@@ -33,21 +17,28 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'WEBM Converter',
       theme: ThemeData(
-        primarySwatch: customSwatch,
+        brightness: Brightness.dark,
+        primaryColor: const Color(0xFF1E1E2D),
+        scaffoldBackgroundColor: const Color(0xFF121212),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          iconTheme: IconThemeData(color: Colors.black),
+          backgroundColor: Color(0xFF1E1E2D),
+          foregroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.white),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
-            backgroundColor: customSwatch,
+            backgroundColor: const Color(0xFFBB86FC), // Purple
             elevation: 5,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
             ),
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
           ),
+        ),
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: Colors.white), // Updated
+          bodySmall: TextStyle(color: Colors.white70), // Updated
         ),
       ),
       debugShowCheckedModeBanner: false,

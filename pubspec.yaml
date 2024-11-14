@@ -1,5 +1,5 @@
-name: video_converter
-description: "A new Flutter project."
+name: webm_converter
+description: "This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
 
   file_selector: ^1.0.3
+  url_launcher: ^6.3.1
 
 
   # The following adds the Cupertino Icons font to your application.
