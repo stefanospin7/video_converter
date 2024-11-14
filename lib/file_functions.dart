@@ -4,27 +4,39 @@ import 'dart:io';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 
+// Function to pick .webm files
 Future<List<XFile>> pickFile(BuildContext context) async {
   const typeGroup = XTypeGroup(label: 'Video', extensions: ['webm']);
   return await openFiles(acceptedTypeGroups: [typeGroup]);
 }
 
-Future<void> convertFiles(
-    BuildContext context, List<XFile> selectedFiles) async {
+// Function to get the correct ffmpeg path depending on the environment
+String getFfmpegPath() {
+  if (Platform.environment.containsKey('SNAP')) {
+    // Use ffmpeg within the Snap package
+    return '${Platform.environment['SNAP']}/usr/bin/ffmpeg';
+  } else {
+    // Use system-wide ffmpeg for development or non-Snap environments
+    return 'ffmpeg';
+  }
+}
+
+// Main conversion function
+Future<void> convertFiles(BuildContext context, List<XFile> selectedFiles) async {
   if (selectedFiles.isEmpty) return;
 
-  // Check if ffmpeg is installed
+  // Check if ffmpeg is installed (only needed outside of Snap environment)
   bool isFfmpegInstalled = await _checkFfmpegInstallation();
 
   if (!isFfmpegInstalled) {
+    // Prompt to install ffmpeg if it’s not found
     if (context.mounted) {
       bool? installFfmpeg = await showDialog<bool>(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("FFmpeg not found"),
-            content: const Text(
-                "FFmpeg is not installed. Do you want to install it?"),
+            content: const Text("FFmpeg is not installed. Do you want to install it?"),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -47,6 +59,7 @@ Future<void> convertFiles(
   }
 
   // Proceed with conversion if ffmpeg is installed
+  final ffmpegPath = getFfmpegPath(); // Get ffmpeg path based on environment
   for (final file in selectedFiles) {
     if (file.path.endsWith('.webm')) {
       try {
@@ -57,9 +70,9 @@ Future<void> convertFiles(
           await outputFile.rename(outputFileName);
         }
 
-        // First try using copy for audio/video streams for a faster conversion
+        // Attempt a faster conversion by copying audio/video streams
         final process = await Process.start(
-          'ffmpeg',
+          ffmpegPath,
           [
             '-y', // Overwrite output files without asking
             '-i', file.path, // Input file
@@ -71,7 +84,6 @@ Future<void> convertFiles(
           mode: ProcessStartMode.normal,
         );
 
-        // Capture stdout and stderr
         process.stdout.transform(utf8.decoder).listen((event) {
           print('stdout: $event');
         });
@@ -80,26 +92,23 @@ Future<void> convertFiles(
           print('stderr: $event');
         });
 
-        // Wait for the process to finish
         int exitCode = await process.exitCode;
 
-        // If the process fails (i.e., codecs are incompatible), fallback to transcoding
+        // If copy method fails, fallback to transcoding
         if (exitCode != 0) {
           print('Copy failed, falling back to transcoding...');
 
           final transcodeProcess = await Process.start(
-            'ffmpeg',
+            ffmpegPath,
             [
               '-y', // Overwrite output files without asking
               '-i', file.path, // Input file
               '-c:v', 'libx264', // Transcode video to H.264
               '-preset', 'fast', // Speed up the conversion
-              '-crf',
-              '18', // Constant Rate Factor (quality control) 0 higher quality, 18 close to loseless, 51 very low quality
+              '-crf', '18', // Constant Rate Factor (quality control)
               '-c:a', 'aac', // Transcode audio to AAC
               '-b:a', '128k', // Set audio bitrate
-              '-vf',
-              'scale=trunc(iw/2)*2:trunc(ih/2)*2', // Ensure even resolution
+              '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', // Ensure even resolution
               '-r', '120', // Fps
               '-movflags', '+faststart', // MP4 optimization for streaming
               outputFilePath, // Output file
@@ -118,7 +127,7 @@ Future<void> convertFiles(
           await transcodeProcess.exitCode;
         }
 
-        // Show completion dialog
+        // Show conversion completion dialog
         if (context.mounted) {
           showDialog(
             context: context,
@@ -130,7 +139,7 @@ Future<void> convertFiles(
             },
           );
 
-          // Dismiss the completion dialog after 3 seconds
+          // Dismiss the dialog after 3 seconds
           Future.delayed(const Duration(seconds: 3), () {
             if (context.mounted) {
               Navigator.of(context).pop();
@@ -138,7 +147,7 @@ Future<void> convertFiles(
           });
         }
       } catch (e) {
-        // Show error dialog safely
+        // Show error dialog if any issues occur
         if (context.mounted) {
           showDialog(
             context: context,
@@ -156,14 +165,13 @@ Future<void> convertFiles(
   }
 }
 
+// Check if ffmpeg is installed (only for non-Snap environments)
 Future<bool> _checkFfmpegInstallation() async {
-  // Check if running in a Snap environment
   if (Platform.environment.containsKey('SNAP')) {
-    // Assume FFmpeg is available in Snap package
+    // Assume FFmpeg is available in the Snap package
     return true;
   }
 
-  // Otherwise, proceed with regular FFmpeg check
   try {
     final result = await Process.run('ffmpeg', ['-version']);
     return result.exitCode == 0; // 0 means ffmpeg is installed
@@ -172,7 +180,7 @@ Future<bool> _checkFfmpegInstallation() async {
   }
 }
 
-
+// Function to install ffmpeg for non-Snap environments
 Future<void> _installFfmpeg(BuildContext context) async {
   String installCommand;
 
@@ -186,14 +194,12 @@ Future<void> _installFfmpeg(BuildContext context) async {
   }
 
   if (installCommand.isNotEmpty) {
-    // Run the installation command using pkexec
     final process = await Process.start(
       'pkexec',
       ['bash', '-c', installCommand],
       mode: ProcessStartMode.normal,
     );
 
-    // Capture output
     process.stdout.transform(utf8.decoder).listen((event) {
       print('stdout: $event');
     });
@@ -202,10 +208,8 @@ Future<void> _installFfmpeg(BuildContext context) async {
       print('stderr: $event');
     });
 
-    // Wait for the process to finish
     await process.exitCode;
 
-    // Show confirmation dialog
     if (context.mounted) {
       showDialog(
         context: context,
@@ -230,8 +234,7 @@ Future<void> _installFfmpeg(BuildContext context) async {
         builder: (BuildContext context) {
           return const AlertDialog(
             title: Text("Unsupported Distribution"),
-            content: Text(
-                "Your Linux distribution is not supported for automatic installation."),
+            content: Text("Your Linux distribution is not supported for automatic installation."),
           );
         },
       );
@@ -239,21 +242,16 @@ Future<void> _installFfmpeg(BuildContext context) async {
   }
 }
 
+// Helper functions for distribution detection
 Future<bool> _isDebianBased() async {
-  return await _checkDistribution("debian") ||
-      await _checkDistribution("ubuntu");
+  return await _checkDistribution("debian") || await _checkDistribution("ubuntu");
 }
 
 Future<bool> _isRedHatBased() async {
-  return await _checkDistribution("fedora") ||
-      await _checkDistribution("centos");
+  return await _checkDistribution("fedora") || await _checkDistribution("centos");
 }
 
 Future<bool> _checkDistribution(String keyword) async {
   final result = await Process.run('lsb_release', ['-is']);
-  return result.stdout
-      .toString()
-      .trim()
-      .toLowerCase()
-      .contains(keyword); // Use result.stdout directly
+  return result.stdout.toString().trim().toLowerCase().contains(keyword);
 }

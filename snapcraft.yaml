@@ -1,27 +1,29 @@
-name: webm-converter  # Name of your app as it appears in the Snap Store
-base: core18          # Switch to core18 to use gnome-3-28 extension for GTK3 support
-version: '1.0.1'      # The version of your app
-summary: A Flutter app for converting webm files to mp4 files  # Short description
+name: webm-converter
+base: core18
+version: '1.0.1'
+summary: A Flutter app for converting webm files to mp4 files
 description: |
   This is an open-source app written in Flutter that allows you to convert webm files to mp4 files.
 
-grade: stable         # Use 'devel' for development versions
-confinement: strict  # Use 'strict' confinement for better security if possible
+grade: stable
+confinement: strict
 
-icon: utils/icon/icon_512p_circle.png  # Path to the icon file
+icon: utils/icon/icon_512p_circle.png
 
 apps:
   webm-converter:
     command: ./video_converter
     desktop: webm-converter.desktop
     extensions:
-      - gnome-3-28  # Add gnome-3-28 extension for GTK3 support with core18
+      - gnome-3-28
     plugs:
-      - network               # Access to the network for online resources
-      - home                  # Access to user home directory
-      - x11                   # Access to X11 for GUI applications
-      - wayland               # Access to Wayland (if applicable)
-      - opengl                # Access to OpenGL for rendering
+      - home                # Access to user’s home directory
+      - network             # Network access, if required
+      - x11                 # Access to X11 for GUI applications
+      - wayland             # Access to Wayland (if applicable)
+      - opengl              # OpenGL access for rendering
+      - removable-media     # Optional, if accessing external media like USB drives
+
 
 parts:
   video-converter:
@@ -30,9 +32,12 @@ parts:
     stage-packages:
       - libgtk-3-0
       - libglib2.0-0
-      - libgdk-pixbuf2.0-0  # Alternate naming for `libgdk-pixbuf-2.0-0`
+      - libgdk-pixbuf2.0-0
       - libglib2.0-bin
       - shared-mime-info
       - hicolor-icon-theme
       - ffmpeg
+      - libglu1-mesa              # Adds libGLU.so.1
+      - freeglut3                 # Adds libglut.so.3
+      - libslang2                 # Adds libslang.so.2
 
