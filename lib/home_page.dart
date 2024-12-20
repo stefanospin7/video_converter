@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart'; // Import flutter_spinkit
 import 'package:desktop_drop/desktop_drop.dart'; // Import desktop_drop
 import 'package:file_selector/file_selector.dart'; // For selecting files if needed
 
@@ -99,10 +100,10 @@ class HomePage extends StatelessWidget {
           ),
           if (isConverting)
             Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
-                strokeWidth: 5.0,
-              ), // Custom loader with a blue accent and thicker stroke
+              child: SpinKitFadingCircle(
+                color: Colors.blueAccent, // Custom color
+                size: 50.0,              // Custom size
+              ),
             ),
           Padding(
             padding: const EdgeInsets.all(16.0),
