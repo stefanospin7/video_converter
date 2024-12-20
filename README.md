@@ -6,7 +6,7 @@ This app currently allows you to convert webm files to mp4 files in linux. This 
 
 ## About v 1.0.2
 
-This is the second updated version of this app, bringing numerous improvements and bug fixes, including:
+This is the third update to the app, introducing numerous improvements and bug fixes, including:
 1. Allowing users to choose the quality of the export.
 2. Allowing users to select the FPS for the exports.
 3. Added drag-and-drop functionality for a smoother experience.
