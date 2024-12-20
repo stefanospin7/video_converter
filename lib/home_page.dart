@@ -178,7 +178,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           DropdownMenuItem<int>(
-            value: 51,
+            value: 45, //51 max
             child: Text( 
               '  Low Quality  ',
               style: TextStyle(
