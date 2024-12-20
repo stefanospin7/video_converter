@@ -25,8 +25,8 @@ class HomePage extends StatelessWidget {
     required this.selectedQuality,
     required this.updateFps,
     required this.updateQuality,
-    required this.onFileDropped, // Add this parameter
-    required this.onFileRemoved, // Add this parameter for file removal
+    required this.onFileDropped,
+    required this.onFileRemoved,
   }) : super(key: key);
 
   @override
@@ -38,7 +38,6 @@ class HomePage extends StatelessWidget {
           Expanded(
             child: DropTarget(
               onDragDone: (details) {
-                // Handle file drop here
                 List<XFile> droppedFiles = details.files
                     .where((file) => file.path.endsWith('.webm')) // Only accept .webm files
                     .map((file) => XFile(file.path))
@@ -46,9 +45,8 @@ class HomePage extends StatelessWidget {
                     .toList();
 
                 if (droppedFiles.isNotEmpty) {
-                  onFileDropped(droppedFiles); // Update the files if valid .webm files
+                  onFileDropped(droppedFiles);
                 } else {
-                  // You can show an error or a toast here if an invalid file is dropped.
                   print('Invalid file dropped. Only .webm files are allowed or duplicates.');
                 }
               },
@@ -64,7 +62,7 @@ class HomePage extends StatelessWidget {
                           margin: const EdgeInsets.symmetric(vertical: 8.0),
                           child: ListTile(
                             contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8.0, // Reduced vertical padding for compact height
+                              vertical: 8.0,
                               horizontal: 16.0,
                             ),
                             title: Text(
@@ -76,8 +74,8 @@ class HomePage extends StatelessWidget {
                             ),
                             trailing: IconButton(
                               icon: Icon(
-                                Icons.remove_circle_outline,
-                                color: Colors.red, // Red color for remove icon
+                                Icons.delete_outline,
+                                color: Colors.white, // White trash icon
                               ),
                               onPressed: () {
                                 onFileRemoved(selectedFiles[index]);
@@ -101,14 +99,14 @@ class HomePage extends StatelessWidget {
           if (isConverting)
             Center(
               child: SpinKitFadingCircle(
-                color: Colors.blueAccent, // Custom color
-                size: 50.0,              // Custom size
+                color: const Color.fromARGB(255, 139, 172, 230), // Custom color
+                size: 50.0, // Custom size
               ),
             ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // Aligning to the left
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -119,16 +117,15 @@ class HomePage extends StatelessWidget {
                       onChanged: updateFps,
                       label: 'FPS',
                     ),
-                    const SizedBox(width: 16), // Add space between dropdowns
+                    const SizedBox(width: 16),
                     _buildQualityDropdown(),
                   ],
                 ),
                 const SizedBox(height: 16),
-                // The buttons will span the entire width of the screen
                 _buildElevatedButton(
                   text: 'Select Files',
                   onPressed: isConverting ? null : () => pickFile(context),
-                  isFullWidth: true, // Set full width
+                  isFullWidth: true,
                 ),
                 const SizedBox(height: 16),
                 _buildElevatedButton(
@@ -136,7 +133,7 @@ class HomePage extends StatelessWidget {
                   onPressed: isConverting || selectedFiles.isEmpty
                       ? null
                       : () => convertFiles(context),
-                  isFullWidth: true, // Set full width
+                  isFullWidth: true,
                 ),
               ],
             ),
@@ -146,7 +143,6 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // Check if the file is already in the selected files list
   bool isFileDuplicate(XFile file) {
     return selectedFiles.any((existingFile) => existingFile.path == file.path);
   }
@@ -158,7 +154,7 @@ class HomePage extends StatelessWidget {
     required String label,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0), // Reduced horizontal padding for compactness
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: DropdownButton<int>(
         value: value,
         items: items
@@ -169,7 +165,7 @@ class HomePage extends StatelessWidget {
                   '$item $label',
                   style: TextStyle(
                     color: value == item ? Colors.white : Colors.grey,
-                    fontSize: 14.0, // Match the text size to be compact
+                    fontSize: 14.0,
                   ),
                 ),
               ),
@@ -178,20 +174,20 @@ class HomePage extends StatelessWidget {
         onChanged: (item) {
           if (item != null) onChanged(item);
         },
-        dropdownColor: const Color(0xFF1E1E2D), // Match background
+        dropdownColor: const Color(0xFF1E1E2D),
         iconEnabledColor: Colors.white,
         style: const TextStyle(color: Colors.white),
-        isExpanded: false, // Prevent dropdown from stretching
-        underline: Container(), // Remove underline
+        isExpanded: false,
+        underline: Container(),
         icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-        borderRadius: BorderRadius.circular(12.0), // Rounded corners
+        borderRadius: BorderRadius.circular(12.0),
       ),
     );
   }
 
   Widget _buildQualityDropdown() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0), // Reduced horizontal padding for compactness
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: DropdownButton<int>(
         value: selectedQuality,
         items: [
@@ -201,7 +197,7 @@ class HomePage extends StatelessWidget {
               '  High Quality  ',
               style: TextStyle(
                 color: selectedQuality == 0 ? Colors.white : Colors.grey,
-                fontSize: 14.0, // Match the text size to be compact
+                fontSize: 14.0,
               ),
             ),
           ),
@@ -211,17 +207,17 @@ class HomePage extends StatelessWidget {
               '  Medium Quality  ',
               style: TextStyle(
                 color: selectedQuality == 18 ? Colors.white : Colors.grey,
-                fontSize: 14.0, // Match the text size to be compact
+                fontSize: 14.0,
               ),
             ),
           ),
           DropdownMenuItem<int>(
-            value: 45, //51 max
-            child: Text( 
+            value: 45,
+            child: Text(
               '  Low Quality  ',
               style: TextStyle(
-                color: selectedQuality == 51 ? Colors.white : Colors.grey,
-                fontSize: 14.0, // Match the text size to be compact
+                color: selectedQuality == 45 ? Colors.white : Colors.grey,
+                fontSize: 14.0,
               ),
             ),
           ),
@@ -229,13 +225,13 @@ class HomePage extends StatelessWidget {
         onChanged: (quality) {
           if (quality != null) updateQuality(quality);
         },
-        dropdownColor: const Color(0xFF1E1E2D), // Match background
+        dropdownColor: const Color(0xFF1E1E2D),
         iconEnabledColor: Colors.white,
         style: const TextStyle(color: Colors.white),
-        isExpanded: false, // Prevent dropdown from stretching
-        underline: Container(), // Remove underline
+        isExpanded: false,
+        underline: Container(),
         icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-        borderRadius: BorderRadius.circular(12.0), // Rounded corners
+        borderRadius: BorderRadius.circular(12.0),
       ),
     );
   }
@@ -248,12 +244,12 @@ class HomePage extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: onPressed != null ? Colors.black : Colors.grey[600], // Button background color
-        padding: const EdgeInsets.symmetric(vertical: 14.0), // Keep the padding the same as before
+        backgroundColor: onPressed != null ? Colors.black : Colors.grey[600],
+        padding: const EdgeInsets.symmetric(vertical: 14.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        minimumSize: isFullWidth ? Size(double.infinity, 50) : Size(200, 50), // Set width for full screen button
+        minimumSize: isFullWidth ? const Size(double.infinity, 50) : const Size(200, 50),
       ),
       child: Text(
         text,
