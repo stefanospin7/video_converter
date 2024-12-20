@@ -12,6 +12,7 @@ class HomePage extends StatelessWidget {
   final Function(int) updateFps;
   final Function(int) updateQuality;
   final Function(List<XFile>) onFileDropped; // Callback to handle file drops
+  final Function(XFile) onFileRemoved; // Callback to handle file removal
 
   const HomePage({
     Key? key,
@@ -24,6 +25,7 @@ class HomePage extends StatelessWidget {
     required this.updateFps,
     required this.updateQuality,
     required this.onFileDropped, // Add this parameter
+    required this.onFileRemoved, // Add this parameter for file removal
   }) : super(key: key);
 
   @override
@@ -39,13 +41,14 @@ class HomePage extends StatelessWidget {
                 List<XFile> droppedFiles = details.files
                     .where((file) => file.path.endsWith('.webm')) // Only accept .webm files
                     .map((file) => XFile(file.path))
+                    .where((file) => !selectedFiles.contains(file)) // Avoid duplicates
                     .toList();
 
                 if (droppedFiles.isNotEmpty) {
                   onFileDropped(droppedFiles); // Update the files if valid .webm files
                 } else {
                   // You can show an error or a toast here if an invalid file is dropped.
-                  print('Invalid file dropped. Only .webm files are allowed.');
+                  print('Invalid file dropped. Only .webm files are allowed or duplicates.');
                 }
               },
               onDragEntered: (_) {},
@@ -69,6 +72,15 @@ class HomePage extends StatelessWidget {
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
                               ),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.remove_circle_outline,
+                                color: Colors.red, // Red color for remove icon
+                              ),
+                              onPressed: () {
+                                onFileRemoved(selectedFiles[index]);
+                              },
                             ),
                           ),
                         );

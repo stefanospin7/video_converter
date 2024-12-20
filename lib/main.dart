@@ -114,6 +114,11 @@ class _MyHomePageState extends State<MyHomePage> {
             selectedFiles.addAll(files);  // Update selected files when files are dropped
           });
         },
+        onFileRemoved: (XFile file) {
+          setState(() {
+            selectedFiles.remove(file); // Remove the selected file from the list
+          });
+        },
       ),
     );
   }
