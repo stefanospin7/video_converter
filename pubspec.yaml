@@ -33,6 +33,7 @@ dependencies:
 
   file_selector: ^1.0.3
   url_launcher: ^6.3.1
+  flutter_spinkit: ^5.2.1
 
 
   # The following adds the Cupertino Icons font to your application.

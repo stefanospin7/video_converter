@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart'; // Add this package
 import 'package:file_selector/file_selector.dart';
 
 class HomePage extends StatelessWidget {
@@ -93,7 +94,15 @@ class HomePage extends StatelessWidget {
                 },
               ),
             ),
-          if (isConverting) const CircularProgressIndicator(),
+          if (isConverting)
+            Expanded(
+              child: Center(
+                child: SpinKitFadingCircle(
+                  color: Colors.purpleAccent,
+                  size: 50.0,
+                ),
+              ),
+            ),
         ],
       ),
     );
