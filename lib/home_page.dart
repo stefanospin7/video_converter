@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                 List<XFile> droppedFiles = details.files
                     .where((file) => file.path.endsWith('.webm')) // Only accept .webm files
                     .map((file) => XFile(file.path))
-                    .where((file) => !selectedFiles.contains(file)) // Avoid duplicates
+                    .where((file) => !isFileDuplicate(file)) // Avoid duplicates
                     .toList();
 
                 if (droppedFiles.isNotEmpty) {
@@ -143,6 +143,11 @@ class HomePage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  // Check if the file is already in the selected files list
+  bool isFileDuplicate(XFile file) {
+    return selectedFiles.any((existingFile) => existingFile.path == file.path);
   }
 
   Widget _buildDropdown({
