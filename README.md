@@ -22,9 +22,10 @@ This is the second updated version of this app, bringing numerous improvements a
 The latest version of this app is available on the Snap Store:
 https://snapcraft.io/webm-converter
 
-![Screenshot 1](./utils/photos/screenshot00.png)
-![screenshot 2](./utils/photos/screenshot04b.png)
-![Screenshot 3](./utils/photos/screenshot02b.png)
+![Screenshot 1](./utils/photos/screen00.png)
+![screenshot 2](./utils/photos/screen01.png)
+![Screenshot 3](./utils/photos/screen03.png)
+![Screenshot 4](./utils/photos/screen04.png)
 
 
 ## Prerequisites (for Non-Snap Installation)
