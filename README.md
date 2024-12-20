@@ -25,7 +25,7 @@ https://snapcraft.io/webm-converter
 ![Screenshot 1](./utils/photos/screen00.png)
 ![screenshot 2](./utils/photos/screen01.png)
 ![Screenshot 3](./utils/photos/screen03.png)
-![Screenshot 4](./utils/photos/screen04.png)
+![Screenshot 4](./utils/photos/screen04b.png)
 
 
 ## Prerequisites (for Non-Snap Installation)
