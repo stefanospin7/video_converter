@@ -37,9 +37,16 @@ class HomePage extends StatelessWidget {
               onDragDone: (details) {
                 // Handle file drop here
                 List<XFile> droppedFiles = details.files
+                    .where((file) => file.path.endsWith('.webm')) // Only accept .webm files
                     .map((file) => XFile(file.path))
                     .toList();
-                onFileDropped(droppedFiles); // Update the files
+
+                if (droppedFiles.isNotEmpty) {
+                  onFileDropped(droppedFiles); // Update the files if valid .webm files
+                } else {
+                  // You can show an error or a toast here if an invalid file is dropped.
+                  print('Invalid file dropped. Only .webm files are allowed.');
+                }
               },
               onDragEntered: (_) {},
               onDragExited: (_) {},
@@ -79,8 +86,11 @@ class HomePage extends StatelessWidget {
             ),
           ),
           if (isConverting)
-            const Center(
-              child: CircularProgressIndicator(), // Simple loading indicator
+            Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent),
+                strokeWidth: 5.0,
+              ), // Custom loader with a blue accent and thicker stroke
             ),
           Padding(
             padding: const EdgeInsets.all(16.0),
