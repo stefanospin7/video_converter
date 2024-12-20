@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart'; // Import url_launcher
 
 class InfoPage extends StatelessWidget {
-  final String appVersion = '1.0.1';
+  final String appVersion = '1.0.2';
 
   const InfoPage({super.key}); // Define your app version here
 
@@ -47,15 +47,15 @@ children: [
   _buildDivider(),
 
   // New section for Version Info
-  _buildSectionTitle('Version 1.0.1'),
-  _buildSectionContent(
-      'This is the second updated version of this app, bringing numerous improvements and bug fixes, including:\n\n'
-      '- A conversion speed approximately 12x faster than the previous version.\n'
-      '- Better resulting video quality (both in fps and frame resolution).\n'
-      '- Fixes the conversion crash bug for large files.\n'
-      '- A modern, darker graphic redesign to reduce eye strain.\n'
-      '- Fixed windows resizing bugs.\n'
-      '- Added a handler to manage the installation of ffmpeg directly from the app.'),
+  _buildSectionTitle('Version 1.0.2'),
+_buildSectionContent(
+    'This is the third update to the app, introducing numerous improvements and bug fixes, including:\n\n'
+    '- Allowing users to choose the quality of the exports.\n'
+    '- Allowing users to select the FPS for the exports.\n'
+    '- Added drag-and-drop functionality for a smoother experience.\n'
+    '- Added the option to delete items after selection.\n'
+    '- Updated the UI with some graphical enhancements.\n'
+    '- Improved overall app functionality and stability.'),
 
   _buildDivider(),
   _buildSectionTitle('Instructions'),
