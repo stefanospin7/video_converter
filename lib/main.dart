@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
-
-import 'home_page.dart';
-import 'file_functions.dart';
+import 'package:webm_converter/file_functions.dart';
+import 'home_page.dart'; // Import the HomePage widget
 import 'info_page.dart'; // Import the InfoPage widget
 
 void main() {
@@ -37,8 +36,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
         textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: Colors.white), // Updated
-          bodySmall: TextStyle(color: Colors.white70), // Updated
+          bodyMedium: TextStyle(color: Colors.white),
+          bodySmall: TextStyle(color: Colors.white70),
         ),
       ),
       debugShowCheckedModeBanner: false,
@@ -65,42 +64,41 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-appBar: AppBar(
-  title: Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      ClipRRect(
-        borderRadius: BorderRadius.circular(6), // Adjust the radius as needed
-        child: Image.asset(
-          'utils/photos/icon_512p.png', // Path to your app icon
-          width: 40,
-          height: 40,
+      appBar: AppBar(
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Image.asset(
+                'utils/photos/icon_512p.png', // Path to your app icon
+                width: 40,
+                height: 40,
+              ),
+            ),
+            const SizedBox(width: 8),
+            const Text('WEBM Converter'),
+          ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const InfoPage()),
+              );
+            },
+          ),
+        ],
       ),
-      const SizedBox(width: 8),
-      const Text('WEBM Converter'),
-    ],
-  ),
-  actions: [
-    IconButton(
-      icon: const Icon(Icons.info),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const InfoPage()),
-        );
-      },
-    ),
-  ],
-),
-
       body: HomePage(
         selectedFiles: selectedFiles,
         isConverting: isConverting,
         pickFile: _pickFile,
         convertFiles: _convertFiles,
-        selectedFps: _selectedFps, // Pass FPS
-        selectedQuality: _selectedQuality, // Pass quality
+        selectedFps: _selectedFps,
+        selectedQuality: _selectedQuality,
         updateFps: (fps) {
           setState(() {
             _selectedFps = fps;
@@ -111,13 +109,17 @@ appBar: AppBar(
             _selectedQuality = quality;
           });
         },
+        onFileDropped: (List<XFile> files) {
+          setState(() {
+            selectedFiles.addAll(files);  // Update selected files when files are dropped
+          });
+        },
       ),
     );
   }
 
   Future<void> _pickFile(BuildContext context) async {
-    final files = await pickFile(context);
-
+    final files = await pickFile(context); // Your logic for picking files
     setState(() {
       selectedFiles = files;
     });
@@ -128,7 +130,6 @@ appBar: AppBar(
       isConverting = true;
     });
 
-    // Pass FPS and quality to convertFiles
     await convertFiles(context, selectedFiles, _selectedFps, _selectedQuality);
 
     setState(() {

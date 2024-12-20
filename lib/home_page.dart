@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart'; // Add this package
-import 'package:file_selector/file_selector.dart';
+import 'package:desktop_drop/desktop_drop.dart'; // Import desktop_drop
+import 'package:file_selector/file_selector.dart'; // For selecting files if needed
 
 class HomePage extends StatelessWidget {
   final List<XFile> selectedFiles;
@@ -11,6 +11,7 @@ class HomePage extends StatelessWidget {
   final int selectedQuality;
   final Function(int) updateFps;
   final Function(int) updateQuality;
+  final Function(List<XFile>) onFileDropped; // Callback to handle file drops
 
   const HomePage({
     Key? key,
@@ -22,6 +23,7 @@ class HomePage extends StatelessWidget {
     required this.selectedQuality,
     required this.updateFps,
     required this.updateQuality,
+    required this.onFileDropped, // Add this parameter
   }) : super(key: key);
 
   @override
@@ -31,46 +33,54 @@ class HomePage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: selectedFiles.isNotEmpty
-                ? ListView.builder(
-                    padding: const EdgeInsets.all(16.0),
-                    itemCount: selectedFiles.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        color: const Color(0xFF2A2A3E),
-                        margin: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 8.0, // Reduced vertical padding for compact height
-                            horizontal: 16.0,
-                          ),
-                          title: Text(
-                            selectedFiles[index].name,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
+            child: DropTarget(
+              onDragDone: (details) {
+                // Handle file drop here
+                List<XFile> droppedFiles = details.files
+                    .map((file) => XFile(file.path))
+                    .toList();
+                onFileDropped(droppedFiles); // Update the files
+              },
+              onDragEntered: (_) {},
+              onDragExited: (_) {},
+              child: selectedFiles.isNotEmpty
+                  ? ListView.builder(
+                      padding: const EdgeInsets.all(16.0),
+                      itemCount: selectedFiles.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: const Color(0xFF2A2A3E),
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 8.0, // Reduced vertical padding for compact height
+                              horizontal: 16.0,
+                            ),
+                            title: Text(
+                              selectedFiles[index].name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Text(
+                        'No files selected.',
+                        style: TextStyle(
+                          color: Colors.grey[500],
+                          fontSize: 18,
                         ),
-                      );
-                    },
-                  )
-                : Center(
-                    child: Text(
-                      'No files selected.',
-                      style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 18,
                       ),
                     ),
-                  ),
+            ),
           ),
           if (isConverting)
             const Center(
-              child: SpinKitFadingCircle(
-                color: Colors.purpleAccent,
-                size: 50.0,
-              ),
+              child: CircularProgressIndicator(), // Simple loading indicator
             ),
           Padding(
             padding: const EdgeInsets.all(16.0),
