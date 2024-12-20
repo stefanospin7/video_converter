@@ -65,20 +65,35 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('WEBM Converter'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const InfoPage()),
-              );
-            },
-          ),
-        ],
+appBar: AppBar(
+  title: Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      ClipRRect(
+        borderRadius: BorderRadius.circular(6), // Adjust the radius as needed
+        child: Image.asset(
+          'utils/photos/icon_512p.png', // Path to your app icon
+          width: 40,
+          height: 40,
+        ),
       ),
+      const SizedBox(width: 8),
+      const Text('WEBM Converter'),
+    ],
+  ),
+  actions: [
+    IconButton(
+      icon: const Icon(Icons.info),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const InfoPage()),
+        );
+      },
+    ),
+  ],
+),
+
       body: HomePage(
         selectedFiles: selectedFiles,
         isConverting: isConverting,
