@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
   final Function(XFile) onFileRemoved; // Callback to handle file removal
 
   const HomePage({
-    Key? key,
+    super.key,
     required this.selectedFiles,
     required this.isConverting,
     required this.pickFile,
@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
     required this.updateQuality,
     required this.onFileDropped,
     required this.onFileRemoved,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                             trailing: IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.delete_outline,
                                 color: Colors.white, // White trash icon
                               ),
@@ -97,9 +97,9 @@ class HomePage extends StatelessWidget {
             ),
           ),
           if (isConverting)
-            Center(
+            const Center(
               child: SpinKitFadingCircle(
-                color: const Color.fromARGB(255, 139, 172, 230), // Custom color
+                color: Color.fromARGB(255, 139, 172, 230), // Custom color
                 size: 50.0, // Custom size
               ),
             ),
