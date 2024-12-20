@@ -1,4 +1,6 @@
 # WEBM converter v 1.0.1
+<img src="./utils/photos/icon_512p.png" alt="icon" width="300" />
+
 
 <img src="./utils/icon/icon1.png" alt="icon" width="300" />
 
@@ -16,27 +18,26 @@ This is the second updated version of this app, bringing numerous improvements a
 6. The creation of a new icon!
 
 
-## Prerequisites
 
-Before using the app, ensure that FFmpeg is installed on your system. If not, you can install it using the package manager specific to your Linux distribution:
+
+## Installation
+
+The latest version of this app is available on the Snap Store:
+https://snapcraft.io/webm-converter
+
+![Screenshot 1](./utils/photos/screenshot00.png)
+![screenshot 2](./utils/photos/screenshot04b.png)
+![Screenshot 3](./utils/photos/screenshot02b.png)
+
+
+## Prerequisites (for Non-Snap Installation)
+
+Before using the app, ensure that FFmpeg is installed on your system. If it is not installed, you can add it using the package manager specific to your Linux distribution. For example:
 
 ```bash
 sudo apt-get update
 sudo apt-get install ffmpeg
 ```
-
-
-## Download
-To use it just dowload the app from the repo and install the file
-(download only for v 1.0.0, 1.0.1 soon)
-[DOWNLOAD THIS REPO](https://github.com/stefanospin7/video_converter_download)
-
-You can follow the installation steps here:
-[Video instructions](https://www.youtube.com/watch?v=AXRcRFt0kOE)
-
-![Screenshot 1](./utils/photos/screenshot00.png)
-![screenshot 2](./utils/photos/screenshot04b.png)
-![Screenshot 3](./utils/photos/screenshot02b.png)
 
 
 ## TODO
