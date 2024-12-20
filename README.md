@@ -1,21 +1,18 @@
-# WEBM converter v 1.0.1
+# WEBM converter v 1.0.2
 <img src="./utils/photos/icon_512p.png" alt="icon" width="300" />
-
-
-<img src="./utils/icon/icon1.png" alt="icon" width="300" />
 
 
 This app currently allows you to convert webm files to mp4 files in linux. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :)
 
-## About v 1.0.1
+## About v 1.0.2
 
-This is the second updated version of this app, bringing numerous improvements and bug fixes, including:
-1. A conversion speed approximately 12x faster than the previous version.
-2. Better resulting video quality (both in fps and frame resolution).
-3. Fixes the conversion crash bug for large files.
-4. A modern, darker graphic redesign to reduce eye strain.
-5. Fixed windows resizing bugs.
-6. The creation of a new icon!
+This is the third update to the app, introducing numerous improvements and bug fixes, including:
+1. Allowing users to choose the quality of the export.
+2. Allowing users to select the FPS for the exports.
+3. Added drag-and-drop functionality for a smoother experience.
+4. Added the option to delete items after selection.
+5. Updated the UI with some graphical enhancements.
+6. Improved overall app functionality and stability.
 
 
 
@@ -25,9 +22,10 @@ This is the second updated version of this app, bringing numerous improvements a
 The latest version of this app is available on the Snap Store:
 https://snapcraft.io/webm-converter
 
-![Screenshot 1](./utils/photos/screenshot00.png)
-![screenshot 2](./utils/photos/screenshot04b.png)
-![Screenshot 3](./utils/photos/screenshot02b.png)
+![Screenshot 1](./utils/photos/screen00.png)
+![screenshot 2](./utils/photos/screen01.png)
+![Screenshot 3](./utils/photos/screen03.png)
+![Screenshot 4](./utils/photos/screen04b.png)
 
 
 ## Prerequisites (for Non-Snap Installation)
@@ -45,35 +43,8 @@ sudo apt-get install ffmpeg
 2. Add support for more video file types for conversion.
 3. Extend the app to be compatible with multiple operating systems (currently only Debian or Red Hat based distros).
 4. Add conversion percentage of the files.
-7. Add quality selection and fps selection.
-8. Add user feedbacks
+5. Add user feedbacks
 
 
 Feel free to contribute by addressing these TODO items or by submitting new features and enhancements. Your contributions are highly appreciated!
 
-## UTILS
-
-Clean/restart the project:
-flutter clean
-snapcraft clean
-flutter build linux
-
-
-Add the .desktop to bundle:
-cp webm-converter.desktop build/linux/x64/release/bundle/
-
-Build the Snap Package:
-command "snapcraft" in the snapcraft.yaml file dir
-
-LXD installation problem:
-after adding the user in the lxd group reboot the system, restart session doesn't work
-
-Test the Snap Package:
-sudo snap install --dangerous --classic my-flutter-app_1.0.0_amd64.snap 
-
-
-register app name:
-https://dashboard.snapcraft.io/
-
-Use this to use previous snapcraft versions (to support core 18)
-sudo snap refresh snapcraft --channel=7.x --classic
