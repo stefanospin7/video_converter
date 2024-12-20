@@ -58,6 +58,10 @@ class _MyHomePageState extends State<MyHomePage> {
   List<XFile> selectedFiles = [];
   bool isConverting = false;
 
+  // Add state for FPS and quality
+  int _selectedFps = 30; // Default FPS
+  int _selectedQuality = 18; // Default quality
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,6 +84,18 @@ class _MyHomePageState extends State<MyHomePage> {
         isConverting: isConverting,
         pickFile: _pickFile,
         convertFiles: _convertFiles,
+        selectedFps: _selectedFps, // Pass FPS
+        selectedQuality: _selectedQuality, // Pass quality
+        updateFps: (fps) {
+          setState(() {
+            _selectedFps = fps;
+          });
+        },
+        updateQuality: (quality) {
+          setState(() {
+            _selectedQuality = quality;
+          });
+        },
       ),
     );
   }
@@ -97,7 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
       isConverting = true;
     });
 
-    await convertFiles(context, selectedFiles);
+    // Pass FPS and quality to convertFiles
+    await convertFiles(context, selectedFiles, _selectedFps, _selectedQuality);
 
     setState(() {
       isConverting = false;
