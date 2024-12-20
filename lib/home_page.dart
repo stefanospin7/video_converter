@@ -87,7 +87,7 @@ class HomePage extends StatelessWidget {
                     )
                   : Center(
                       child: Text(
-                        'No files selected.',
+                        'Click "Select Files" or drag and drop files here',
                         style: TextStyle(
                           color: Colors.grey[500],
                           fontSize: 18,
