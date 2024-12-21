@@ -23,8 +23,7 @@ Future<void> convertFiles(
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("FFmpeg not found"),
-            content: const Text(
-                "FFmpeg is not installed. Do you want to install it?"),
+            content: const Text("FFmpeg is not installed. Do you want to install it?"),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -94,12 +93,10 @@ Future<void> convertFiles(
               '-i', file.path, // Input file
               '-c:v', 'libx264', // Transcode video to H.264
               '-preset', 'fast', // Speed up the conversion
-              '-crf',
-              selectedQuality.toString(), // Constant Rate Factor (quality control)
+              '-crf', selectedQuality.toString(), // Constant Rate Factor (quality control)
               '-c:a', 'aac', // Transcode audio to AAC
               '-b:a', '128k', // Set audio bitrate
-              '-vf',
-              'scale=trunc(iw/2)*2:trunc(ih/2)*2', // Ensure even resolution
+              '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', // Ensure even resolution
               '-r', selectedFps.toString(), // Fps
               '-movflags', '+faststart', // MP4 optimization for streaming
               outputFilePath, // Output file
@@ -118,10 +115,11 @@ Future<void> convertFiles(
           await transcodeProcess.exitCode;
         }
 
-        // Show completion dialog
+        // Show completion dialog with interaction blocking
         if (context.mounted) {
           showDialog(
             context: context,
+            barrierDismissible: false, // Prevent dismissing the dialog by tapping outside
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text("Conversion Completed"),
@@ -130,15 +128,15 @@ Future<void> convertFiles(
             },
           );
 
-          // Dismiss the completion dialog after 3 seconds
+          // Delay for 3 seconds, then safely dismiss the dialog
           Future.delayed(const Duration(seconds: 3), () {
-            if (context.mounted) {
+            if (context.mounted && Navigator.canPop(context)) {
               Navigator.of(context).pop();
             }
           });
         }
       } catch (e) {
-        // Show error dialog safely
+        // Safely handle errors and show error dialog
         if (context.mounted) {
           showDialog(
             context: context,
@@ -150,7 +148,7 @@ Future<void> convertFiles(
             },
           );
         }
-        return; // Exit the function immediately after showing the error dialog
+        return;
       }
     }
   }
