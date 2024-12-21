@@ -1,6 +1,6 @@
 name: webm-converter
 base: core18
-version: '1.0.1'
+version: '1.0.2'
 summary: A Flutter app for converting webm files to mp4 files
 description: |
   This is an open-source app written in Flutter that allows you to convert webm files to mp4 files.
