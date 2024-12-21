@@ -31,115 +31,140 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF1E1E2D), // Dark background color
-      body: Column(
-        children: [
-          Expanded(
-            child: DropTarget(
-              onDragDone: (details) {
-                List<XFile> droppedFiles = details.files
-                    .where((file) => file.path.endsWith('.webm')) // Only accept .webm files
-                    .map((file) => XFile(file.path))
-                    .where((file) => !isFileDuplicate(file)) // Avoid duplicates
-                    .toList();
+    // Block interaction if conversion is in progress
+    bool shouldBlockInteraction = isConverting || selectedFiles.isNotEmpty && isConverting;
 
-                if (droppedFiles.isNotEmpty) {
-                  onFileDropped(droppedFiles);
-                } else {
-                  print('Invalid file dropped. Only .webm files are allowed or duplicates.');
-                }
-              },
-              onDragEntered: (_) {},
-              onDragExited: (_) {},
-              child: selectedFiles.isNotEmpty
-                  ? ListView.builder(
-                      padding: const EdgeInsets.all(16.0),
-                      itemCount: selectedFiles.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          color: const Color(0xFF2A2A3E),
-                          margin: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8.0,
-                              horizontal: 16.0,
-                            ),
-                            title: Text(
-                              selectedFiles[index].name,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: const Color(0xFF1E1E2D), // Dark background color
+          body: Column(
+            children: [
+              Expanded(
+                child: DropTarget(
+                  onDragDone: (details) {
+                    // Allow file drops only if not converting
+                    if (!shouldBlockInteraction) {
+                      List<XFile> droppedFiles = details.files
+                          .where((file) => file.path.endsWith('.webm')) // Only accept .webm files
+                          .map((file) => XFile(file.path))
+                          .where((file) => !isFileDuplicate(file)) // Avoid duplicates
+                          .toList();
+
+                      if (droppedFiles.isNotEmpty) {
+                        onFileDropped(droppedFiles);
+                      } else {
+                        print('Invalid file dropped. Only .webm files are allowed or duplicates.');
+                      }
+                    }
+                  },
+                  onDragEntered: (_) {},
+                  onDragExited: (_) {},
+                  child: selectedFiles.isNotEmpty
+                      ? ListView.builder(
+                          padding: const EdgeInsets.all(16.0),
+                          itemCount: selectedFiles.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              color: const Color(0xFF2A2A3E),
+                              margin: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                  horizontal: 16.0,
+                                ),
+                                title: Text(
+                                  selectedFiles[index].name,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(
+                                    Icons.delete_outline,
+                                    color: Colors.white, // White trash icon
+                                  ),
+                                  onPressed: shouldBlockInteraction
+                                      ? null // Disable delete action during conversion
+                                      : () {
+                                          onFileRemoved(selectedFiles[index]);
+                                        },
+                                ),
                               ),
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(
-                                Icons.delete_outline,
-                                color: Colors.white, // White trash icon
-                              ),
-                              onPressed: () {
-                                onFileRemoved(selectedFiles[index]);
-                              },
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Text(
+                            'Click "Select Files" or drag and drop files here',
+                            style: TextStyle(
+                              color: Colors.grey[500],
+                              fontSize: 18,
                             ),
                           ),
-                        );
-                      },
-                    )
-                  : Center(
-                      child: Text(
-                        'Click "Select Files" or drag and drop files here',
-                        style: TextStyle(
-                          color: Colors.grey[500],
-                          fontSize: 18,
                         ),
-                      ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        _buildDropdown(
+                          value: selectedFps,
+                          items: [24, 30, 60, 120],
+                          onChanged: updateFps,
+                          label: 'FPS',
+                        ),
+                        const SizedBox(width: 16),
+                        _buildQualityDropdown(),
+                      ],
                     ),
+                    const SizedBox(height: 16),
+                    _buildElevatedButton(
+                      text: 'Select Files',
+                      onPressed: shouldBlockInteraction ? null : () => pickFile(context),
+                      isFullWidth: true,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildElevatedButton(
+                      text: 'Convert Files',
+                      onPressed: shouldBlockInteraction || selectedFiles.isEmpty
+                          ? null
+                          : () async {
+                              // Start conversion process and block the view
+                              await convertFiles(context);
+                            },
+                      isFullWidth: true,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Overlay for when converting files
+        if (shouldBlockInteraction) ...[
+          Positioned.fill(
+            child: ModalBarrier(
+              color: Colors.black.withOpacity(0.8), // Semi-transparent overlay
+              dismissible: false, // Prevent dismissing the barrier
             ),
           ),
-          if (isConverting)
-            const Center(
+          const Positioned.fill(
+            child: Center(
               child: SpinKitFadingCircle(
                 color: Color.fromARGB(255, 139, 172, 230), // Custom color
                 size: 50.0, // Custom size
               ),
             ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    _buildDropdown(
-                      value: selectedFps,
-                      items: [24, 30, 60, 120],
-                      onChanged: updateFps,
-                      label: 'FPS',
-                    ),
-                    const SizedBox(width: 16),
-                    _buildQualityDropdown(),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                _buildElevatedButton(
-                  text: 'Select Files',
-                  onPressed: isConverting ? null : () => pickFile(context),
-                  isFullWidth: true,
-                ),
-                const SizedBox(height: 16),
-                _buildElevatedButton(
-                  text: 'Convert Files',
-                  onPressed: isConverting || selectedFiles.isEmpty
-                      ? null
-                      : () => convertFiles(context),
-                  isFullWidth: true,
-                ),
-              ],
-            ),
           ),
         ],
-      ),
+      ],
     );
   }
 
