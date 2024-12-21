@@ -48,3 +48,24 @@ sudo apt-get install ffmpeg
 
 Feel free to contribute by addressing these TODO items or by submitting new features and enhancements. Your contributions are highly appreciated!
 
+# Snapcraft hints
+
+after flutter linux build
+cp my-app.desktop build/linux/x64/release/bundle/
+
+create the snap:
+snapcraft
+
+install and test the snap:
+sudo snap install my-app_1.0.0_amd64.snap --dangerous
+
+upload it:
+snapcraft upload webm-converter_1.0.2_amd64.snap
+
+check the revision number:
+snapcraft revisions webm-converter
+
+for example 3:
+snapcraft release webm-converter 3 stable
+
+
