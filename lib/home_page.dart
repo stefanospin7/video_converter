@@ -237,11 +237,11 @@ class HomePage extends StatelessWidget {
             ),
           ),
           DropdownMenuItem<int>(
-            value: 45,
+            value: 30,
             child: Text(
               '  Low Quality  ',
               style: TextStyle(
-                color: selectedQuality == 45 ? Colors.white : Colors.grey,
+                color: selectedQuality == 30 ? Colors.white : Colors.grey,
                 fontSize: 14.0,
               ),
             ),
