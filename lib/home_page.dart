@@ -1,57 +1,11 @@
 import 'dart:async';
-import 'dart:io'; // For FFmpeg execution
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart'; // Import flutter_spinkit
 import 'package:desktop_drop/desktop_drop.dart'; // Import desktop_drop
-import 'package:file_selector/file_selector.dart'; // For selecting files if needed
+import 'package:file_selector/file_selector.dart';
+import 'package:webm_converter/custom_audio_player.dart'; // For selecting files if needed
 
-class CustomAudioPlayer {
-  // Method to play audio using ffplay (FFmpeg)
-  static Future<void> playAudio(String filePath) async {
-    try {
-      // Path to the ffplay executable (ensure ffplay is available in the system path)
-      String ffplayPath = 'ffplay';
-
-      // Command arguments for ffplay
-      List<String> arguments = [
-        '-nodisp',           // No video display
-        '-autoexit',         // Auto exit when finished playing
-        '-volume', '100',    // Set volume level (0-100)
-        filePath,            // Input file
-      ];
-
-      // Start the FFmpeg process to play the audio with ffplay
-      final process = await Process.start(ffplayPath, arguments);
-
-      // Capture stderr to handle any errors
-      process.stderr.listen((data) {
-        print('Error from ffplay: ${String.fromCharCodes(data)}');
-      });
-
-      // Wait for the process to complete
-      await process.exitCode;
-    } catch (e) {
-      print("Error occurred while playing audio with ffplay: $e");
-    }
-  }
-
-  // Method to stop audio - Not applicable here, as ffplay doesn't allow stopping in the middle
-  static Future<void> stopAudio() async {
-    print("Stop functionality is not available with ffplay command.");
-  }
-
-  // Method to pause audio - Not applicable with ffplay directly
-  static Future<void> pauseAudio() async {
-    print("Pause functionality is not available with ffplay command.");
-  }
-
-  // Dispose method to release resources - Nothing to dispose for ffplay
-  static Future<void> dispose() async {
-    print("No resources to dispose for ffplay.");
-  }
-}
-
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final List<XFile> selectedFiles;
   final bool isConverting;
   final Future<void> Function(BuildContext context) pickFile;
@@ -78,8 +32,15 @@ class HomePage extends StatelessWidget {
   });
 
   @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  bool isMuted = false; // Mute state (local)
+
+  @override
   Widget build(BuildContext context) {
-    bool shouldBlockInteraction = isConverting || selectedFiles.isNotEmpty && isConverting;
+    bool shouldBlockInteraction = widget.isConverting || widget.selectedFiles.isNotEmpty && widget.isConverting;
 
     return Stack(
       children: [
@@ -87,6 +48,23 @@ class HomePage extends StatelessWidget {
           backgroundColor: const Color(0xFF1E1E2D),
           body: Column(
             children: [
+              // Mute Switch
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text('Mute'),
+                  Switch(
+                    value: isMuted,
+                    onChanged: (value) {
+                      setState(() {
+                        isMuted = value;
+                        CustomAudioPlayer.muteAudio = value; // Update global mute state
+                      });
+                    },
+                    activeColor: Colors.blue,
+                  ),
+                ],
+              ),
               Expanded(
                 child: DropTarget(
                   onDragDone: (details) {
@@ -98,7 +76,7 @@ class HomePage extends StatelessWidget {
                           .toList();
 
                       if (droppedFiles.isNotEmpty) {
-                        onFileDropped(droppedFiles);
+                        widget.onFileDropped(droppedFiles);
                       } else {
                         print('Invalid file dropped. Only .webm files are allowed or duplicates.');
                       }
@@ -106,10 +84,10 @@ class HomePage extends StatelessWidget {
                   },
                   onDragEntered: (_) {},
                   onDragExited: (_) {},
-                  child: selectedFiles.isNotEmpty
+                  child: widget.selectedFiles.isNotEmpty
                       ? ListView.builder(
                           padding: const EdgeInsets.all(16.0),
-                          itemCount: selectedFiles.length,
+                          itemCount: widget.selectedFiles.length,
                           itemBuilder: (context, index) {
                             return Card(
                               color: const Color(0xFF2A2A3E),
@@ -120,7 +98,7 @@ class HomePage extends StatelessWidget {
                                   horizontal: 16.0,
                                 ),
                                 title: Text(
-                                  selectedFiles[index].name,
+                                  widget.selectedFiles[index].name,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500,
@@ -134,8 +112,11 @@ class HomePage extends StatelessWidget {
                                   onPressed: shouldBlockInteraction
                                       ? null
                                       : () {
-                                          onFileRemoved(selectedFiles[index]);
-                                          CustomAudioPlayer.playAudio('utils/audio/trash_sound.mp3'); // Play delete sound
+                                          widget.onFileRemoved(widget.selectedFiles[index]);
+                                          // Play the trash sound, respecting mute setting
+                                          if (!isMuted) {
+                                            CustomAudioPlayer.playAudio('utils/audio/trash_sound.mp3');
+                                          }
                                         },
                                 ),
                               ),
@@ -162,9 +143,9 @@ class HomePage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         _buildDropdown(
-                          value: selectedFps,
+                          value: widget.selectedFps,
                           items: [24, 30, 60, 120],
-                          onChanged: updateFps,
+                          onChanged: widget.updateFps,
                           label: 'FPS',
                         ),
                         const SizedBox(width: 16),
@@ -174,19 +155,19 @@ class HomePage extends StatelessWidget {
                     const SizedBox(height: 16),
                     _buildElevatedButton(
                       text: 'Select Files',
-                      onPressed: shouldBlockInteraction ? null : () => pickFile(context),
+                      onPressed: shouldBlockInteraction ? null : () => widget.pickFile(context),
                       isFullWidth: true,
                     ),
                     const SizedBox(height: 16),
                     _buildElevatedButton(
                       text: 'Convert Files',
-                      onPressed: shouldBlockInteraction || selectedFiles.isEmpty
+                      onPressed: shouldBlockInteraction || widget.selectedFiles.isEmpty
                           ? null
                           : () async {
-                              await convertFiles(context);
+                              await widget.convertFiles(context);
 
-                              // Play success sound after conversion
-                              if (!isConverting) {
+                              // Play success sound after conversion, respecting mute setting
+                              if (!isMuted) {
                                 CustomAudioPlayer.playAudio('utils/audio/confirmation_sound.mp3');
                               }
                             },
@@ -219,7 +200,7 @@ class HomePage extends StatelessWidget {
   }
 
   bool isFileDuplicate(XFile file) {
-    return selectedFiles.any((existingFile) => existingFile.path == file.path);
+    return widget.selectedFiles.any((existingFile) => existingFile.path == file.path);
   }
 
   Widget _buildDropdown({
@@ -264,14 +245,14 @@ class HomePage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: DropdownButton<int>(
-        value: selectedQuality,
+        value: widget.selectedQuality,
         items: [
           DropdownMenuItem<int>(
             value: 0,
             child: Text(
               '  High Quality  ',
               style: TextStyle(
-                color: selectedQuality == 0 ? Colors.white : Colors.grey,
+                color: widget.selectedQuality == 0 ? Colors.white : Colors.grey,
                 fontSize: 14.0,
               ),
             ),
@@ -281,7 +262,7 @@ class HomePage extends StatelessWidget {
             child: Text(
               '  Medium Quality  ',
               style: TextStyle(
-                color: selectedQuality == 18 ? Colors.white : Colors.grey,
+                color: widget.selectedQuality == 18 ? Colors.white : Colors.grey,
                 fontSize: 14.0,
               ),
             ),
@@ -291,14 +272,14 @@ class HomePage extends StatelessWidget {
             child: Text(
               '  Low Quality  ',
               style: TextStyle(
-                color: selectedQuality == 30 ? Colors.white : Colors.grey,
+                color: widget.selectedQuality == 30 ? Colors.white : Colors.grey,
                 fontSize: 14.0,
               ),
             ),
           ),
         ],
         onChanged: (quality) {
-          if (quality != null) updateQuality(quality);
+          if (quality != null) widget.updateQuality(quality);
         },
         dropdownColor: const Color(0xFF1E1E2D),
         iconEnabledColor: Colors.white,
