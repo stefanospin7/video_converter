@@ -1,7 +1,55 @@
+import 'dart:async';
+import 'dart:io'; // For FFmpeg execution
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart'; // Import flutter_spinkit
 import 'package:desktop_drop/desktop_drop.dart'; // Import desktop_drop
 import 'package:file_selector/file_selector.dart'; // For selecting files if needed
+
+class CustomAudioPlayer {
+  // Method to play audio using ffplay (FFmpeg)
+  static Future<void> playAudio(String filePath) async {
+    try {
+      // Path to the ffplay executable (ensure ffplay is available in the system path)
+      String ffplayPath = 'ffplay';
+
+      // Command arguments for ffplay
+      List<String> arguments = [
+        '-nodisp',           // No video display
+        '-autoexit',         // Auto exit when finished playing
+        '-volume', '100',    // Set volume level (0-100)
+        filePath,            // Input file
+      ];
+
+      // Start the FFmpeg process to play the audio with ffplay
+      final process = await Process.start(ffplayPath, arguments);
+
+      // Capture stderr to handle any errors
+      process.stderr.listen((data) {
+        print('Error from ffplay: ${String.fromCharCodes(data)}');
+      });
+
+      // Wait for the process to complete
+      await process.exitCode;
+    } catch (e) {
+      print("Error occurred while playing audio with ffplay: $e");
+    }
+  }
+
+  // Method to stop audio - Not applicable here, as ffplay doesn't allow stopping in the middle
+  static Future<void> stopAudio() async {
+    print("Stop functionality is not available with ffplay command.");
+  }
+
+  // Method to pause audio - Not applicable with ffplay directly
+  static Future<void> pauseAudio() async {
+    print("Pause functionality is not available with ffplay command.");
+  }
+
+  // Dispose method to release resources - Nothing to dispose for ffplay
+  static Future<void> dispose() async {
+    print("No resources to dispose for ffplay.");
+  }
+}
 
 class HomePage extends StatelessWidget {
   final List<XFile> selectedFiles;
@@ -12,10 +60,10 @@ class HomePage extends StatelessWidget {
   final int selectedQuality;
   final Function(int) updateFps;
   final Function(int) updateQuality;
-  final Function(List<XFile>) onFileDropped; // Callback to handle file drops
-  final Function(XFile) onFileRemoved; // Callback to handle file removal
+  final Function(List<XFile>) onFileDropped;
+  final Function(XFile) onFileRemoved;
 
-  const HomePage({
+  HomePage({
     super.key,
     required this.selectedFiles,
     required this.isConverting,
@@ -31,24 +79,22 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Block interaction if conversion is in progress
     bool shouldBlockInteraction = isConverting || selectedFiles.isNotEmpty && isConverting;
 
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: const Color(0xFF1E1E2D), // Dark background color
+          backgroundColor: const Color(0xFF1E1E2D),
           body: Column(
             children: [
               Expanded(
                 child: DropTarget(
                   onDragDone: (details) {
-                    // Allow file drops only if not converting
                     if (!shouldBlockInteraction) {
                       List<XFile> droppedFiles = details.files
-                          .where((file) => file.path.endsWith('.webm')) // Only accept .webm files
+                          .where((file) => file.path.endsWith('.webm'))
                           .map((file) => XFile(file.path))
-                          .where((file) => !isFileDuplicate(file)) // Avoid duplicates
+                          .where((file) => !isFileDuplicate(file))
                           .toList();
 
                       if (droppedFiles.isNotEmpty) {
@@ -83,12 +129,13 @@ class HomePage extends StatelessWidget {
                                 trailing: IconButton(
                                   icon: const Icon(
                                     Icons.delete_outline,
-                                    color: Colors.white, // White trash icon
+                                    color: Colors.white,
                                   ),
                                   onPressed: shouldBlockInteraction
-                                      ? null // Disable delete action during conversion
+                                      ? null
                                       : () {
                                           onFileRemoved(selectedFiles[index]);
+                                          CustomAudioPlayer.playAudio('utils/audio/trash_sound.mp3'); // Play delete sound
                                         },
                                 ),
                               ),
@@ -136,8 +183,12 @@ class HomePage extends StatelessWidget {
                       onPressed: shouldBlockInteraction || selectedFiles.isEmpty
                           ? null
                           : () async {
-                              // Start conversion process and block the view
                               await convertFiles(context);
+
+                              // Play success sound after conversion
+                              if (!isConverting) {
+                                CustomAudioPlayer.playAudio('utils/audio/confirmation_sound.mp3');
+                              }
                             },
                       isFullWidth: true,
                     ),
@@ -147,7 +198,6 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-        // Overlay for when converting files
         if (shouldBlockInteraction) ...[
           Positioned.fill(
             child: ModalBarrier(
