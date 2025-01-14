@@ -162,18 +162,87 @@ Future<bool> _checkFfmpegInstallation() async {
     return false;
   }
 }
-
 Future<void> _installFfmpeg(BuildContext context) async {
-  // Add installation logic for FFmpeg here (platform-specific)
-  if (context.mounted) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          title: Text("FFmpeg Installed"),
-          content: Text("FFmpeg has been installed successfully."),
-        );
-      },
-    );
+  String installCommand;
+
+  // Suggest installation commands based on common distributions
+  if (await _isDebianBased()) {
+    installCommand = 'apt install ffmpeg -y';
+  } else if (await _isRedHatBased()) {
+    installCommand = 'dnf install ffmpeg -y';
+  } else {
+    installCommand = '';
   }
+
+  if (installCommand.isNotEmpty) {
+    // Run the installation command using pkexec
+    final process = await Process.start(
+      'pkexec',
+      ['bash', '-c', installCommand],
+      mode: ProcessStartMode.normal,
+    );
+
+    // Capture output
+    process.stdout.transform(utf8.decoder).listen((event) {
+      print('stdout: $event');
+    });
+
+    process.stderr.transform(utf8.decoder).listen((event) {
+      print('stderr: $event');
+    });
+
+    // Wait for the process to finish
+    await process.exitCode;
+
+    // Show confirmation dialog
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Installation Completed"),
+            content: const Text("FFmpeg installation is complete!"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  } else {
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return const AlertDialog(
+            title: Text("Unsupported Distribution"),
+            content: Text(
+                "Your Linux distribution is not supported for automatic installation."),
+          );
+        },
+      );
+    }
+  }
+}
+
+Future<bool> _isDebianBased() async {
+  return await _checkDistribution("debian") ||
+      await _checkDistribution("ubuntu");
+}
+
+Future<bool> _isRedHatBased() async {
+  return await _checkDistribution("fedora") ||
+      await _checkDistribution("centos");
+}
+
+Future<bool> _checkDistribution(String keyword) async {
+  final result = await Process.run('lsb_release', ['-is']);
+  return result.stdout
+      .toString()
+      .trim()
+      .toLowerCase()
+      .contains(keyword); // Use result.stdout directly
 }
