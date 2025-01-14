@@ -37,6 +37,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isMuted = false; // Mute state (local)
+  bool isDarkMode = true; // Dark mode state
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +46,39 @@ class _HomePageState extends State<HomePage> {
     return Stack(
       children: [
         Scaffold(
-          backgroundColor: const Color(0xFF1E1E2D),
+          appBar: AppBar(
+            actions: [
+              // Dark/Light mode switch
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text('Dark Mode'),
+                  Switch(
+                    value: isDarkMode,
+                    onChanged: (value) {
+                      setState(() {
+                        isDarkMode = value;
+                      });
+                    },
+                    activeColor: Colors.blue,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          backgroundColor: isDarkMode ? const Color(0xFF1E1E2D) : Colors.white,
           body: Column(
             children: [
               // Mute Switch
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text('Mute'),
+                  Text(
+                    'Mute',
+                    style: TextStyle(
+                      color: isDarkMode ? Colors.white : Colors.black, // Adjust mute label text color
+                    ),
+                  ),
                   Switch(
                     value: isMuted,
                     onChanged: (value) {
@@ -90,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                           itemCount: widget.selectedFiles.length,
                           itemBuilder: (context, index) {
                             return Card(
-                              color: const Color(0xFF2A2A3E),
+                              color: isDarkMode ? const Color(0xFF2A2A3E) : Colors.grey[300],
                               margin: const EdgeInsets.symmetric(vertical: 8.0),
                               child: ListTile(
                                 contentPadding: const EdgeInsets.symmetric(
@@ -99,15 +125,15 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 title: Text(
                                   widget.selectedFiles[index].name,
-                                  style: const TextStyle(
-                                    color: Colors.white,
+                                  style: TextStyle(
+                                    color: isDarkMode ? Colors.white : Colors.black,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 trailing: IconButton(
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.delete_outline,
-                                    color: Colors.white,
+                                    color: isDarkMode ? Colors.white : Colors.black,
                                   ),
                                   onPressed: shouldBlockInteraction
                                       ? null
@@ -127,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                             'Click "Select Files" or drag and drop files here',
                             style: TextStyle(
-                              color: Colors.grey[500],
+                              color: isDarkMode ? Colors.grey[500] : Colors.black54,
                               fontSize: 18,
                             ),
                           ),
@@ -204,93 +230,103 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildDropdown({
-    required int value,
-    required List<int> items,
-    required Function(int) onChanged,
-    required String label,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: DropdownButton<int>(
-        value: value,
-        items: items
-            .map(
-              (item) => DropdownMenuItem<int>(
-                value: item,
-                child: Text(
-                  '$item $label',
-                  style: TextStyle(
-                    color: value == item ? Colors.white : Colors.grey,
-                    fontSize: 14.0,
-                  ),
+  required int value,
+  required List<int> items,
+  required Function(int) onChanged,
+  required String label,
+}) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    child: DropdownButton<int>(
+      value: value,
+      items: items
+          .map(
+            (item) => DropdownMenuItem<int>(
+              value: item,
+              child: Text(
+                '$item $label',
+                style: TextStyle(
+                  color: value == item
+                      ? (isDarkMode ? Colors.white : Colors.black) // Selected value color
+                      : (isDarkMode ? Colors.grey : Colors.black.withOpacity(0.6)), // Unselected color
+                  fontSize: 14.0,
                 ),
               ),
-            )
-            .toList(),
-        onChanged: (item) {
-          if (item != null) onChanged(item);
-        },
-        dropdownColor: const Color(0xFF1E1E2D),
-        iconEnabledColor: Colors.white,
-        style: const TextStyle(color: Colors.white),
-        isExpanded: false,
-        underline: Container(),
-        icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-    );
-  }
+            ),
+          )
+          .toList(),
+      onChanged: (item) {
+        if (item != null) onChanged(item);
+      },
+      dropdownColor: isDarkMode ? const Color(0xFF1E1E2D) : Colors.white, // Background color of dropdown
+      iconEnabledColor: isDarkMode ? Colors.white : Colors.black, // Arrow icon color
+      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black), // Text color inside the dropdown
+      isExpanded: false,
+      underline: Container(),
+      icon: const Icon(Icons.arrow_drop_down),
+      borderRadius: BorderRadius.circular(12.0),
+    ),
+  );
+}
 
-  Widget _buildQualityDropdown() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: DropdownButton<int>(
-        value: widget.selectedQuality,
-        items: [
-          DropdownMenuItem<int>(
-            value: 0,
-            child: Text(
-              '  High Quality  ',
-              style: TextStyle(
-                color: widget.selectedQuality == 0 ? Colors.white : Colors.grey,
-                fontSize: 14.0,
-              ),
+
+Widget _buildQualityDropdown() {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    child: DropdownButton<int>(
+      value: widget.selectedQuality,
+      items: [
+        DropdownMenuItem<int>(
+          value: 0,
+          child: Text(
+            '  High Quality  ',
+            style: TextStyle(
+              color: widget.selectedQuality == 0
+                  ? (isDarkMode ? Colors.white : Colors.black) // Selected color
+                  : (isDarkMode ? Colors.grey : Colors.black.withOpacity(0.6)), // Unselected color
+              fontSize: 14.0,
             ),
           ),
-          DropdownMenuItem<int>(
-            value: 18,
-            child: Text(
-              '  Medium Quality  ',
-              style: TextStyle(
-                color: widget.selectedQuality == 18 ? Colors.white : Colors.grey,
-                fontSize: 14.0,
-              ),
+        ),
+        DropdownMenuItem<int>(
+          value: 18,
+          child: Text(
+            '  Medium Quality  ',
+            style: TextStyle(
+              color: widget.selectedQuality == 18
+                  ? (isDarkMode ? Colors.white : Colors.black) // Selected color
+                  : (isDarkMode ? Colors.grey : Colors.black.withOpacity(0.6)), // Unselected color
+              fontSize: 14.0,
             ),
           ),
-          DropdownMenuItem<int>(
-            value: 30,
-            child: Text(
-              '  Low Quality  ',
-              style: TextStyle(
-                color: widget.selectedQuality == 30 ? Colors.white : Colors.grey,
-                fontSize: 14.0,
-              ),
+        ),
+        DropdownMenuItem<int>(
+          value: 30,
+          child: Text(
+            '  Low Quality  ',
+            style: TextStyle(
+              color: widget.selectedQuality == 30
+                  ? (isDarkMode ? Colors.white : Colors.black) // Selected color
+                  : (isDarkMode ? Colors.grey : Colors.black.withOpacity(0.6)), // Unselected color
+              fontSize: 14.0,
             ),
           ),
-        ],
-        onChanged: (quality) {
-          if (quality != null) widget.updateQuality(quality);
-        },
-        dropdownColor: const Color(0xFF1E1E2D),
-        iconEnabledColor: Colors.white,
-        style: const TextStyle(color: Colors.white),
-        isExpanded: false,
-        underline: Container(),
-        icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-    );
-  }
+        ),
+      ],
+      onChanged: (quality) {
+        if (quality != null) widget.updateQuality(quality);
+      },
+      dropdownColor: isDarkMode ? const Color(0xFF1E1E2D) : Colors.white, // Background color of dropdown
+      iconEnabledColor: isDarkMode ? Colors.white : Colors.black, // Arrow icon color
+      style: TextStyle(color: isDarkMode ? Colors.white : Colors.black), // Text color inside the dropdown
+      isExpanded: false,
+      underline: Container(),
+      icon: const Icon(Icons.arrow_drop_down),
+      borderRadius: BorderRadius.circular(12.0),
+    ),
+  );
+}
+
 
   Widget _buildElevatedButton({
     required String text,
@@ -300,7 +336,7 @@ class _HomePageState extends State<HomePage> {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: onPressed != null ? Colors.black : Colors.grey[600],
+        backgroundColor: isDarkMode ? Colors.black : Colors.black, // Same for both modes
         padding: const EdgeInsets.symmetric(vertical: 14.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -309,7 +345,11 @@ class _HomePageState extends State<HomePage> {
       ),
       child: Text(
         text,
-        style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
+          color: isDarkMode ? Colors.white : Colors.grey, // Ensure button text stays white
+        ),
       ),
     );
   }
