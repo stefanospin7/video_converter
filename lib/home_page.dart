@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_selector/file_selector.dart';
@@ -38,30 +41,65 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isMuted = false;
   bool isDarkMode = true;
-  bool hasShownNotification = false; // To track if notification has been shown
+  bool hasShownNotification = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/utils/user_preferences.json');
+      if (await file.exists()) {
+        final contents = await file.readAsString();
+        final Map<String, dynamic> json = jsonDecode(contents);
+        setState(() {
+          isMuted = json['isMuted'] ?? false;
+          isDarkMode = json['isDarkMode'] ?? true;
+        });
+      }
+    } catch (e) {
+      print("Error loading preferences: $e");
+    }
+  }
+
+  Future<void> _savePreferences() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/utils/user_preferences.json');
+      final preferences = {
+        'isMuted': isMuted,
+        'isDarkMode': isDarkMode,
+      };
+      await file.create(recursive: true); // Make sure the directory exists
+      await file.writeAsString(jsonEncode(preferences));
+    } catch (e) {
+      print("Error saving preferences: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
-    // Check if the screen size is large enough
     final isScreenLargeEnough = screenWidth >= 300 && screenHeight >= 300;
 
-    // Show notification only once if the screen size is too small
     if (!isScreenLargeEnough && !hasShownNotification) {
       hasShownNotification = true;
       Future.delayed(Duration.zero, () {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Please resize the window to at least 300x300 to display content.'),
+            content: Text(
+                'Please resize the window to at least 300x300 to display content.'),
             duration: const Duration(seconds: 2),
           ),
         );
       });
     }
 
-    // Reset the notification flag when the size becomes sufficient
     if (isScreenLargeEnough && hasShownNotification) {
       hasShownNotification = false;
     }
@@ -75,17 +113,17 @@ class _HomePageState extends State<HomePage> {
           body: isScreenLargeEnough
               ? Column(
                   children: [
-                    // Mute and Dark Mode Switches
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        if (screenWidth >= 600) // Show Dark Mode switch only for larger screens
+                        if (screenWidth >= 600)
                           Row(
                             children: [
                               Text(
                                 'Dark Mode',
                                 style: TextStyle(
-                                  color: isDarkMode ? Colors.white : Colors.black,
+                                  color:
+                                      isDarkMode ? Colors.white : Colors.black,
                                 ),
                               ),
                               Switch(
@@ -94,6 +132,7 @@ class _HomePageState extends State<HomePage> {
                                   setState(() {
                                     isDarkMode = value;
                                   });
+                                  _savePreferences(); // Save preferences after change
                                 },
                                 activeColor: Colors.blue,
                               ),
@@ -113,6 +152,7 @@ class _HomePageState extends State<HomePage> {
                               isMuted = value;
                               CustomAudioPlayer.muteAudio = value;
                             });
+                            _savePreferences(); // Save preferences after change
                           },
                           activeColor: Colors.blue,
                         ),
@@ -263,8 +303,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   bool isFileDuplicate(XFile file) {
-    return widget.selectedFiles.any(
-        (existingFile) => existingFile.path == file.path);
+    return widget.selectedFiles
+        .any((existingFile) => existingFile.path == file.path);
   }
 
   Widget _buildDropdown({
