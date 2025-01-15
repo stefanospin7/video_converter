@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart'; // Import url_launcher
 
 class InfoPage extends StatelessWidget {
-  final String appVersion = '1.0.2';
+  final String appVersion = '1.0.3';
 
   const InfoPage({super.key}); // Define your app version here
 
@@ -47,15 +47,14 @@ children: [
   _buildDivider(),
 
   // New section for Version Info
-  _buildSectionTitle('Version 1.0.2'),
+  _buildSectionTitle('Version 1.0.3'),
 _buildSectionContent(
-    'This is the third update to the app, introducing numerous improvements and bug fixes, including:\n\n'
-    '- Allowing users to choose the quality of the exports.\n'
-    '- Allowing users to select the FPS for the exports.\n'
-    '- Added drag-and-drop functionality for a smoother experience.\n'
-    '- Added the option to delete items after selection.\n'
-    '- Updated the UI with some graphical enhancements.\n'
-    '- Improved overall app functionality and stability.'),
+    'This is the fourth update to the app, introducing numerous improvements and bug fixes, including:\n\n'
+    '- arm64 support (the app now works on ARM-based Linux systems in addition to amd64).\n'
+    '- Added user preferences, including the choice between dark mode and light mode, as well as an option to mute the app.\n'
+    '- Added sound effects to provide user feedback.\n'
+    '- General code improvements for better performance and stability.\n'
+    ),
 
   _buildDivider(),
   _buildSectionTitle('Instructions'),
