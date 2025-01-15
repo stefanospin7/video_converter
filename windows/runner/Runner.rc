@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "video_converter" "\0"
+            VALUE "FileDescription", "webm_converter" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "video_converter" "\0"
+            VALUE "InternalName", "webm_converter" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "video_converter.exe" "\0"
-            VALUE "ProductName", "video_converter" "\0"
+            VALUE "OriginalFilename", "webm_converter.exe" "\0"
+            VALUE "ProductName", "webm_converter" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
