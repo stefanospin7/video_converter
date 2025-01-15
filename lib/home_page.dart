@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
   final Function(List<XFile>) onFileDropped;
   final Function(XFile) onFileRemoved;
 
-  HomePage({
+  const HomePage({
     super.key,
     required this.selectedFiles,
     required this.isConverting,
@@ -91,10 +91,10 @@ class _HomePageState extends State<HomePage> {
       hasShownNotification = true;
       Future.delayed(Duration.zero, () {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text(
                 'Please resize the window to at least 300x300 to display content.'),
-            duration: const Duration(seconds: 2),
+            duration: Duration(seconds: 2),
           ),
         );
       });
@@ -332,7 +332,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildQualityDropdown() {
     return DropdownButton<int>(
       value: widget.selectedQuality,
-      items: [
+      items: const [
         DropdownMenuItem(value: 0, child: Text('High Quality')),
         DropdownMenuItem(value: 18, child: Text('Medium Quality')),
         DropdownMenuItem(value: 30, child: Text('Low Quality')),
