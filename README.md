@@ -20,6 +20,12 @@ This is the fourth update to the app, introducing numerous improvements and new 
 The latest version of this app is available on the Snap Store:
 https://snapcraft.io/webm-converter
 
+Via terminal:
+
+```bash
+sudo snap install webm-converter
+```
+
 ![Screenshot 1](./utils/photos/screen_05.png)
 ![screenshot 2](./utils/photos/screen_06.png)
 ![Screenshot 3](./utils/photos/screen_07.png)
@@ -47,7 +53,7 @@ Feel free to contribute by addressing these TODO items or by submitting new feat
 
 # Snapcraft hints
 
-after flutter linux build
+after flutter build linux
 cp my-app.desktop build/linux/x64/release/bundle/
 
 create the snap:
