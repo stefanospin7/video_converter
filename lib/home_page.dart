@@ -52,7 +52,8 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadPreferences() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/utils/user_preferences.json');
+      final file = File(
+          '${directory.path}/.webm_converter_app/utils/user_preferences.json');
       if (await file.exists()) {
         final contents = await file.readAsString();
         final Map<String, dynamic> json = jsonDecode(contents);
@@ -69,7 +70,8 @@ class _HomePageState extends State<HomePage> {
   Future<void> _savePreferences() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final file = File('${directory.path}/utils/user_preferences.json');
+      final file = File(
+          '${directory.path}/.webm_converter_app/utils/user_preferences.json');
       final preferences = {
         'isMuted': isMuted,
         'isDarkMode': isDarkMode,
