@@ -12,21 +12,21 @@ icon: utils/icon/icon_512p_circle.png
 
 apps:
   webm-converter:
-    command: ./video_converter
+    command: ./webm_converter  
     desktop: webm-converter.desktop
     extensions:
       - gnome-3-28
     plugs:
-      - home                # Access to user’s home directory
-      - network             # Network access, if required
-      - x11                 # Access to X11 for GUI applications
-      - wayland             # Access to Wayland (if applicable)
-      - opengl              # OpenGL access for rendering
-      - removable-media     # Optional, if accessing external media like USB drives
-
+      - home
+      - network
+      - x11
+      - wayland
+      - opengl
+      - removable-media
+      - audio-playback
 
 parts:
-  video-converter:
+  webm-converter:
     plugin: dump
     source: build/linux/x64/release/bundle
     stage-packages:
@@ -37,7 +37,6 @@ parts:
       - shared-mime-info
       - hicolor-icon-theme
       - ffmpeg
-      - libglu1-mesa              # Adds libGLU.so.1
-      - freeglut3                 # Adds libglut.so.3
-      - libslang2                 # Adds libslang.so.2
-
+      - libglu1-mesa
+      - freeglut3
+      - libslang2

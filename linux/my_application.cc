@@ -47,7 +47,13 @@ static void my_application_activate(GApplication* application) {
     gtk_window_set_title(window, "webm_converter");
   }
 
+  // Set default window size
   gtk_window_set_default_size(window, 1280, 720);
+
+  // Enable resizing and maximization
+  gtk_window_set_resizable(window, TRUE);  // Allow resizing
+  gtk_window_maximize(window);            // Open maximized by default (optional)
+
   gtk_widget_show(GTK_WIDGET(window));
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();
@@ -83,8 +89,6 @@ static gboolean my_application_local_command_line(GApplication* application, gch
 
 // Implements GApplication::startup.
 static void my_application_startup(GApplication* application) {
-  //MyApplication* self = MY_APPLICATION(object);
-
   // Perform any actions required at application startup.
 
   G_APPLICATION_CLASS(my_application_parent_class)->startup(application);
@@ -92,8 +96,6 @@ static void my_application_startup(GApplication* application) {
 
 // Implements GApplication::shutdown.
 static void my_application_shutdown(GApplication* application) {
-  //MyApplication* self = MY_APPLICATION(object);
-
   // Perform any actions required at application shutdown.
 
   G_APPLICATION_CLASS(my_application_parent_class)->shutdown(application);
