@@ -53,8 +53,7 @@ class InfoPage extends StatelessWidget {
               _buildSectionContent(
                   'This is the fourth update to the app, introducing numerous improvements and bug fixes, including:\n\n'
                   '- arm64 support (the app now works on ARM-based Linux systems in addition to amd64).\n'
-                  '- Added user preferences, including the choice between dark mode and light mode, as well as an option to mute the app.\n'
-                  '- Added sound effects to provide user feedback.\n'
+                  '- Added user preferences, including the choice between dark mode and light mode.\n'
                   '- General code improvements for better performance and stability.\n'),
 
               _buildDivider(),

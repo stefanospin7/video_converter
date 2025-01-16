@@ -9,9 +9,8 @@ This app currently allows you to convert webm files to mp4 files in linux. This 
 This is the fourth update to the app, introducing numerous improvements and new features, including:
 
 1. **arm64 support**: The app now works on ARM-based Linux systems in addition to amd64.  
-2. **User preferences**: Added options for dark mode and light mode, as well as an option to mute the app.  
-3. **Sound feedback**: Added sound effects to provide better feedback to the user.  
-4. **General code improvements**: Enhanced performance and stability.  
+2. **User preferences**: Added options for dark mode and light mode.   
+3. **General code improvements**: Enhanced performance and stability.  
 
 
 
@@ -20,6 +19,7 @@ This is the fourth update to the app, introducing numerous improvements and new 
 The latest version of this app is available on the Snap Store:
 https://snapcraft.io/webm-converter
 
+<<<<<<< HEAD
 Via terminal:
 
 ```bash
@@ -30,6 +30,11 @@ sudo snap install webm-converter
 ![screenshot 2](./utils/photos/screen_06.png)
 ![Screenshot 3](./utils/photos/screen_07.png)
 ![Screenshot 4](./utils/photos/screen_08.png)
+=======
+![Screenshot 1](./utils/photos/screen_10.png)
+![screenshot 2](./utils/photos/screen_11.png)
+![Screenshot 3](./utils/photos/screen_12.png)
+>>>>>>> dev/dev_1.0.3
 
 
 ## Prerequisites (for Non-Snap Installation)

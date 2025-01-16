@@ -141,6 +141,7 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         const SizedBox(width: 16),
+                        /* Removing this from this release since isn't working for snap package, will be in 1.0.4
                         Text(
                           'Mute',
                           style: TextStyle(
@@ -158,6 +159,7 @@ class _HomePageState extends State<HomePage> {
                           },
                           activeColor: Colors.blue,
                         ),
+                      */
                       ],
                     ),
                     Expanded(
