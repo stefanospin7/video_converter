@@ -63,23 +63,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: Image.asset(
-                'utils/photos/icon_512p.png', // Path to your app icon
-                width: 40,
-                height: 40,
-              ),
-            ),
-            const SizedBox(width: 8),
-            const Text('WEBM Converter'),
-          ],
-        ),
+        title: screenSize.width >= 300 && screenSize.height >= 100
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Image.asset(
+                      'utils/photos/icon_512p.png', // Path to your app icon
+                      width: 40,
+                      height: 40,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text('WEBM Converter'),
+                ],
+              )
+            : null, // Hide the title if the screen size is too small
         actions: [
           IconButton(
             icon: const Icon(Icons.info),
@@ -111,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         onFileDropped: (List<XFile> files) {
           setState(() {
-            selectedFiles.addAll(files);  // Update selected files when files are dropped
+            selectedFiles.addAll(files); // Update selected files when files are dropped
           });
         },
         onFileRemoved: (XFile file) {

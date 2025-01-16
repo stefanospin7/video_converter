@@ -1,6 +1,6 @@
 {
-    "name": "video_converter",
-    "short_name": "video_converter",
+    "name": "webm_converter",
+    "short_name": "webm_converter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
