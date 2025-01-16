@@ -1,5 +1,5 @@
 name: webm-converter
-base: core18
+base: core24
 version: '1.0.3'
 summary: A Flutter app for converting webm files to mp4 files
 description: |
@@ -15,7 +15,7 @@ apps:
     command: ./webm_converter  
     desktop: webm-converter.desktop
     extensions:
-      - gnome-3-28
+      - gnome
     plugs:
       - home
       - network
@@ -24,11 +24,13 @@ apps:
       - opengl
       - removable-media
       - audio-playback
+      - desktop
+      - desktop-legacy
 
 parts:
   webm-converter:
     plugin: dump
-    source: build/linux/x64/release/bundle
+    source: build/linux/arm64/release/bundle
     stage-packages:
       - libgtk-3-0
       - libglib2.0-0
@@ -38,5 +40,4 @@ parts:
       - hicolor-icon-theme
       - ffmpeg
       - libglu1-mesa
-      - freeglut3
       - libslang2
