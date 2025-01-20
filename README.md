@@ -26,15 +26,9 @@ Via terminal:
 sudo snap install webm-converter
 ```
 
-![Screenshot 1](./utils/photos/screen_05.png)
-![screenshot 2](./utils/photos/screen_06.png)
-![Screenshot 3](./utils/photos/screen_07.png)
-![Screenshot 4](./utils/photos/screen_08.png)
-=======
 ![Screenshot 1](./utils/photos/screen_10.png)
 ![screenshot 2](./utils/photos/screen_11.png)
 ![Screenshot 3](./utils/photos/screen_12.png)
->>>>>>> dev/dev_1.0.3
 
 
 ## Prerequisites (for Non-Snap Installation)
