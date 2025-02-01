@@ -4,7 +4,7 @@
 cd "$(dirname "$0")"
 
 # Name of your app executable
-app_executable="video_converter"
+app_executable="webm_converter"
 
 # Check if the app is already executable
 if [ ! -x "$app_executable" ]; then

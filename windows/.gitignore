@@ -15,3 +15,13 @@ x86/
 *.[Cc]ache
 # but keep track of directories ending in .cache
 !*.[Cc]ache/
+
+
+# Ignore Snapcraft package files to prevent large, unnecessary build artifacts
+# from being tracked in Git. Snap packages (.snap files) are generated during
+# the build process and do not need to be version-controlled.
+# for some reason this isn't working, does not ignore the package.
+
+#This is not working, it's still keeping the snap package
+*.snap
+
