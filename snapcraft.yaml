@@ -26,6 +26,8 @@ apps:
       - audio-playback
       - desktop
       - desktop-legacy
+    environment:
+      "LD_LIBRARY_PATH": "$LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack"
 
 parts:
   webm-converter:
@@ -41,3 +43,6 @@ parts:
       - ffmpeg
       - libglu1-mesa
       - libslang2
+    organize:
+      usr/lib/*-linux-gnu/blas/*: usr/lib/
+      usr/lib/*-linux-gnu/lapack/*: usr/lib/
