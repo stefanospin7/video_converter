@@ -19,7 +19,6 @@ This is the fourth update to the app, introducing numerous improvements and new 
 The latest version of this app is available on the Snap Store:
 https://snapcraft.io/webm-converter
 
-<<<<<<< HEAD
 Via terminal:
 
 ```bash
