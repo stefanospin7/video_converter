@@ -26,15 +26,10 @@ Via terminal:
 sudo snap install webm-converter
 ```
 
-![Screenshot 1](./utils/photos/screen_05.png)
-![screenshot 2](./utils/photos/screen_06.png)
-![Screenshot 3](./utils/photos/screen_07.png)
-![Screenshot 4](./utils/photos/screen_08.png)
-=======
+
 ![Screenshot 1](./utils/photos/screen_10.png)
 ![screenshot 2](./utils/photos/screen_11.png)
 ![Screenshot 3](./utils/photos/screen_12.png)
->>>>>>> dev/dev_1.0.3
 
 
 ## Prerequisites (for Non-Snap Installation)
@@ -60,6 +55,7 @@ Feel free to contribute by addressing these TODO items or by submitting new feat
 
 after flutter build linux
 cp my-app.desktop build/linux/x64/release/bundle/
+cp webm-converter.desktop build/linux/arm64/release/bundle/
 
 create the snap:
 snapcraft
