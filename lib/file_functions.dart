@@ -13,39 +13,7 @@ Future<void> convertFiles(
     BuildContext context, List<XFile> selectedFiles, int selectedFps, int selectedQuality) async {
   if (selectedFiles.isEmpty) return;
 
-  // Check if ffmpeg is installed
-  bool isFfmpegInstalled = await _checkFfmpegInstallation();
-
-  if (!isFfmpegInstalled) {
-    if (context.mounted) {
-      bool? installFfmpeg = await showDialog<bool>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("FFmpeg not found"),
-            content: const Text("FFmpeg is not installed. Do you want to install it?"),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text("No"),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text("Yes"),
-              ),
-            ],
-          );
-        },
-      );
-
-      if (installFfmpeg == true) {
-        await _installFfmpeg(context);
-      }
-    }
-    return; // Exit the function if ffmpeg is not installed
-  }
-
-  // Proceed with conversion if ffmpeg is installed
+  // Proceed with conversion since FFmpeg is already available
   for (final file in selectedFiles) {
     if (file.path.endsWith('.webm')) {
       try {
@@ -151,29 +119,5 @@ Future<void> convertFiles(
         return;
       }
     }
-  }
-}
-
-Future<bool> _checkFfmpegInstallation() async {
-  try {
-    final result = await Process.run('ffmpeg', ['-version']);
-    return result.exitCode == 0;
-  } catch (e) {
-    return false;
-  }
-}
-
-Future<void> _installFfmpeg(BuildContext context) async {
-  // Add installation logic for FFmpeg here (platform-specific)
-  if (context.mounted) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          title: Text("FFmpeg Installed"),
-          content: Text("FFmpeg has been installed successfully."),
-        );
-      },
-    );
   }
 }

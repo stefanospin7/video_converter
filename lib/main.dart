@@ -128,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _pickFile(BuildContext context) async {
-    final files = await pickFile(context); // Your logic for picking files
+    final files = await pickFile(context);
     setState(() {
       selectedFiles = files;
     });
