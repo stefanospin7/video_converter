@@ -71,6 +71,3 @@ snapcraft revisions webm-converter
 
 for example 3:
 snapcraft release webm-converter 3 stable
-
-
-test commit vivobook
