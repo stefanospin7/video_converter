@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:webm_converter/app_links.dart';
 import 'package:webm_converter/custom_audio_player.dart';
 
 class HomePage extends StatefulWidget {
@@ -42,11 +43,75 @@ class _HomePageState extends State<HomePage> {
   bool isMuted = false;
   bool isDarkMode = true;
   bool hasShownNotification = false;
+  bool hasShownMigrationNotice = false;
 
   @override
   void initState() {
     super.initState();
     _loadPreferences();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showMigrationNotice();
+    });
+  }
+
+  void _showMigrationNotice() {
+    if (!mounted || hasShownMigrationNotice) {
+      return;
+    }
+
+    hasShownMigrationNotice = true;
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (dialogContext) {
+        return AlertDialog(
+          titlePadding: const EdgeInsets.fromLTRB(24, 20, 12, 0),
+          title: Row(
+            children: [
+              const Expanded(
+                child: Text('New app available'),
+              ),
+              IconButton(
+                tooltip: 'Close',
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                icon: const Icon(Icons.close),
+              ),
+            ],
+          ),
+          content: const Text(
+            'WEBM Converter is no longer supported. Armour Converter is the new app for video, audio and image conversion. It is available on Snap Store for both AMD64 and ARM64, is more efficient, and includes more up-to-date features.\n\nOpen it on Snap Store to install the updated app.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('Later'),
+            ),
+            FilledButton(
+              onPressed: () async {
+                Navigator.of(dialogContext).pop();
+                await _openArmourConverter();
+              },
+              child: const Text('Open Snap Store'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _openArmourConverter() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final opened = await openArmourConverterStore();
+    if (!mounted || opened) {
+      return;
+    }
+
+    messenger.showSnackBar(
+      const SnackBar(
+        content: Text('Unable to open Armour Converter right now.'),
+      ),
+    );
   }
 
   Future<void> _loadPreferences() async {
@@ -88,11 +153,16 @@ class _HomePageState extends State<HomePage> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final isScreenLargeEnough = screenWidth >= 300 && screenHeight >= 300;
+    final messenger = ScaffoldMessenger.of(context);
 
     if (!isScreenLargeEnough && !hasShownNotification) {
       hasShownNotification = true;
       Future.delayed(Duration.zero, () {
-        ScaffoldMessenger.of(context).showSnackBar(
+        if (!mounted) {
+          return;
+        }
+
+        messenger.showSnackBar(
           const SnackBar(
             content: Text(
                 'Please resize the window to at least 300x300 to display content.'),
@@ -136,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                                   });
                                   _savePreferences(); // Save preferences after change
                                 },
-                                activeColor: Colors.blue,
+                                activeThumbColor: Colors.blue,
                               ),
                             ],
                           ),
@@ -289,7 +359,7 @@ class _HomePageState extends State<HomePage> {
         if (shouldBlockInteraction) ...[
           Positioned.fill(
             child: ModalBarrier(
-              color: Colors.black.withOpacity(0.8),
+              color: Colors.black.withValues(alpha: 0.8),
               dismissible: false,
             ),
           ),

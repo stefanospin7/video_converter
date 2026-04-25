@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart'; // Import url_launcher
+import 'package:webm_converter/app_links.dart';
 
 class InfoPage extends StatelessWidget {
-  final String appVersion = '1.0.3';
+  final String appVersion = '1.0.4';
 
   const InfoPage({super.key}); // Define your app version here
 
@@ -39,23 +39,51 @@ class InfoPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _buildSectionTitle('Important Notice'),
+              _buildSectionContent(
+                'WEBM Converter will no longer be actively maintained. It was used as the base for Armour Converter, which is now the recommended app for future updates, better efficiency, and more recent features.',
+              ),
+              _buildSectionContent(
+                'If you still need a simple WebM to MP4 workflow you can keep using this app, but new development will continue on Armour Converter. Armour Converter is available on Snap Store for both AMD64 and ARM64 systems.',
+              ),
+              _buildLink(
+                context,
+                'Snap Store: Download Armour Converter',
+                armourConverterUrl,
+              ),
+              _buildDivider(),
               _buildSectionTitle('App Info'),
               _buildSectionContent(
                   'This is an open-source app written in Flutter that currently allows you to convert webm files to mp4 files. This functionality is made possible by ffmpeg, without which the app would not work. While I know this can be done via the terminal, I wanted to contribute to the open-source world by providing a graphical app to do it :) You can take a look and contribute to the code here on GitHub:'),
-              _buildLink('GitHub Repo',
+              _buildLink(context, 'GitHub Repo',
                   'https://github.com/stefanospin7/webm_converter'),
-              _buildLink(
-                  'For more information on ffmpeg', 'https://ffmpeg.org/'),
+              _buildLink(context, 'For more information on ffmpeg',
+                  'https://ffmpeg.org/'),
               _buildDivider(),
-
-              // New section for Version Info
-              _buildSectionTitle('Version 1.0.3'),
+              _buildSectionTitle('Armour Converter'),
               _buildSectionContent(
-                  'This is the fourth update to the app, introducing numerous improvements and bug fixes, including:\n\n'
-                  '- arm64 support (the app now works on ARM-based Linux systems in addition to amd64).\n'
-                  '- Added user preferences, including the choice between dark mode and light mode.\n'
-                  '- General code improvements for better performance and stability.\n'),
-
+                'A powerful multimedia converter for video, audio and images. Armour Converter is a fast, more efficient and easy-to-use multimedia converter built with Flutter, available for both AMD64 and ARM64 on Snap Store.',
+              ),
+              _buildSectionContent(
+                'Features:\n\n'
+                '- Video to Video: MP4, MKV, AVI, WebM, MOV\n'
+                '- Video to Audio: Extract audio from videos\n'
+                '- Audio to Audio: MP3, AAC, WAV, FLAC, OPUS, OGG\n'
+                '- Image to Image: PNG, JPG, WebP, BMP, TIFF\n'
+                '- Batch conversion support\n'
+                '- Quality and FPS settings\n'
+                '- Dark/Light theme\n'
+                '- English and Italian languages',
+              ),
+              _buildLink(
+                context,
+                'Snap Store: Open Armour Converter',
+                armourConverterUrl,
+              ),
+              _buildDivider(),
+              _buildSectionTitle('Version 1.0.4'),
+              _buildSectionContent(
+                  'This release turns WEBM Converter into a migration build for Armour Converter. It adds a startup notice, a direct call-to-action in the top bar, and updated in-app information to guide users to the newer, more efficient app with broader and more up-to-date features.'),
               _buildDivider(),
               _buildSectionTitle('Instructions'),
               _buildSectionContent(
@@ -64,8 +92,10 @@ class InfoPage extends StatelessWidget {
               _buildSectionTitle('Developer Info'),
               _buildSectionContent(
                   'My name is Stefano Spinelli and I work as an iOS developer (Swift). In my free time, I enjoy making music and programming in various languages. If you want to contact me, get more information, give me advice, insult me for my code, or collaborate on the app, you can do so on Twitter via DMs. I also provide my GitHub if you want to follow me:'),
-              _buildLink('My GitHub page', 'https://github.com/stefanospin7'),
-              _buildLink('X(Twitter)', 'https://twitter.com/stefanospinel15'),
+              _buildLink(
+                  context, 'My GitHub page', 'https://github.com/stefanospin7'),
+              _buildLink(
+                  context, 'X(Twitter)', 'https://twitter.com/stefanospinel15'),
             ],
           ),
         ),
@@ -116,7 +146,7 @@ class InfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLink(String title, String url) {
+  Widget _buildLink(BuildContext context, String title, String url) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -126,11 +156,14 @@ class InfoPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: GestureDetector(
             onTap: () async {
-              // Open the URL in the default browser
-              if (await canLaunch(url)) {
-                await launch(url);
-              } else {
-                throw 'Could not launch $url';
+              final messenger = ScaffoldMessenger.of(context);
+              final opened = await openExternalLink(url);
+              if (!opened && context.mounted) {
+                messenger.showSnackBar(
+                  SnackBar(
+                    content: Text('Could not launch $url'),
+                  ),
+                );
               }
             },
             child: Text(

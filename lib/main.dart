@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:webm_converter/app_links.dart';
 import 'package:webm_converter/file_functions.dart';
 import 'home_page.dart'; // Import the HomePage widget
 import 'info_page.dart'; // Import the InfoPage widget
@@ -61,9 +62,24 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedFps = 30; // Default FPS
   int _selectedQuality = 18; // Default quality
 
+  Future<void> _openArmourConverter() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final opened = await openArmourConverterStore();
+    if (!mounted || opened) {
+      return;
+    }
+
+    messenger.showSnackBar(
+      const SnackBar(
+        content: Text('Unable to open Armour Converter right now.'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    final showArmourTextButton = screenSize.width >= 760;
 
     return Scaffold(
       appBar: AppBar(
@@ -85,6 +101,24 @@ class _MyHomePageState extends State<MyHomePage> {
               )
             : null, // Hide the title if the screen size is too small
         actions: [
+          if (showArmourTextButton)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: TextButton.icon(
+                onPressed: _openArmourConverter,
+                icon: const Icon(Icons.open_in_new, color: Colors.white),
+                label: const Text(
+                  'Armour Converter on Snap Store',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
+          else
+            IconButton(
+              tooltip: 'Open Armour Converter on Snap Store',
+              icon: const Icon(Icons.download_for_offline_outlined),
+              onPressed: _openArmourConverter,
+            ),
           IconButton(
             icon: const Icon(Icons.info),
             onPressed: () {
@@ -115,12 +149,14 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         onFileDropped: (List<XFile> files) {
           setState(() {
-            selectedFiles.addAll(files); // Update selected files when files are dropped
+            selectedFiles
+                .addAll(files); // Update selected files when files are dropped
           });
         },
         onFileRemoved: (XFile file) {
           setState(() {
-            selectedFiles.remove(file); // Remove the selected file from the list
+            selectedFiles
+                .remove(file); // Remove the selected file from the list
           });
         },
       ),
