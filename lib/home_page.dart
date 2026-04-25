@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           content: const Text(
-            'WEBM Converter is no longer supported. Armour Converter is the new app for video, audio and image conversion. It is available on Snap Store for both AMD64 and ARM64, is more efficient, and includes more up-to-date features.\n\nOpen it on Snap Store to install the updated app.',
+            'WEBM Converter will no longer receive updates. Download Armour Converter from Snap Store to continue with the newer app.',
           ),
           actions: [
             TextButton(

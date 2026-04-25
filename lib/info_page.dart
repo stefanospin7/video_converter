@@ -41,10 +41,10 @@ class InfoPage extends StatelessWidget {
             children: [
               _buildSectionTitle('Important Notice'),
               _buildSectionContent(
-                'WEBM Converter will no longer be actively maintained. It was used as the base for Armour Converter, which is now the recommended app for future updates, better efficiency, and more recent features.',
+                'WEBM Converter will no longer be actively maintained. Future updates will continue on Armour Converter.',
               ),
               _buildSectionContent(
-                'If you still need a simple WebM to MP4 workflow you can keep using this app, but new development will continue on Armour Converter. Armour Converter is available on Snap Store for both AMD64 and ARM64 systems.',
+                'If you still need a simple WebM to MP4 workflow you can keep using this app, but the recommended app is now Armour Converter on Snap Store.',
               ),
               _buildLink(
                 context,
@@ -60,30 +60,9 @@ class InfoPage extends StatelessWidget {
               _buildLink(context, 'For more information on ffmpeg',
                   'https://ffmpeg.org/'),
               _buildDivider(),
-              _buildSectionTitle('Armour Converter'),
-              _buildSectionContent(
-                'A powerful multimedia converter for video, audio and images. Armour Converter is a fast, more efficient and easy-to-use multimedia converter built with Flutter, available for both AMD64 and ARM64 on Snap Store.',
-              ),
-              _buildSectionContent(
-                'Features:\n\n'
-                '- Video to Video: MP4, MKV, AVI, WebM, MOV\n'
-                '- Video to Audio: Extract audio from videos\n'
-                '- Audio to Audio: MP3, AAC, WAV, FLAC, OPUS, OGG\n'
-                '- Image to Image: PNG, JPG, WebP, BMP, TIFF\n'
-                '- Batch conversion support\n'
-                '- Quality and FPS settings\n'
-                '- Dark/Light theme\n'
-                '- English and Italian languages',
-              ),
-              _buildLink(
-                context,
-                'Snap Store: Open Armour Converter',
-                armourConverterUrl,
-              ),
-              _buildDivider(),
               _buildSectionTitle('Version 1.0.4'),
               _buildSectionContent(
-                  'This release turns WEBM Converter into a migration build for Armour Converter. It adds a startup notice, a direct call-to-action in the top bar, and updated in-app information to guide users to the newer, more efficient app with broader and more up-to-date features.'),
+                  'This release adds a startup notice, a direct call-to-action in the top bar, and an info section that points users to Armour Converter on Snap Store.'),
               _buildDivider(),
               _buildSectionTitle('Instructions'),
               _buildSectionContent(

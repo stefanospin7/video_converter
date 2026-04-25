@@ -1,18 +1,9 @@
 name: webm-converter
 base: core18
 version: "1.0.4"
-summary: Legacy WebM to MP4 converter
+summary: A Flutter app for converting webm files to mp4 files
 description: |
-  WEBM Converter is a legacy Flutter app that converts WebM files to MP4 files.
-
-  This app will no longer be actively maintained because future development has moved to Armour Converter.
-
-  Download Armour Converter on the Snap Store:
-  https://snapcraft.io/armour-converter
-
-  Armour Converter adds support for video, audio and image conversion, batch processing,
-  quality and FPS controls, dark/light theme, and English/Italian languages.
-  It is available for both AMD64 and ARM64, is more efficient, and includes more up-to-date features.
+  This is an open-source app written in Flutter that allows you to convert webm files to mp4 files.
 
 grade: stable
 confinement: strict
@@ -47,5 +38,7 @@ parts:
       - hicolor-icon-theme
       - ffmpeg
       - libglu1-mesa
+      - libgles1
+      - libgles2
       - freeglut3
       - libslang2
